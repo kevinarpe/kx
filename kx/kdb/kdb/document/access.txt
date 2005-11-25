@@ -1,0 +1,36 @@
+k db ... -o      for readonly
+
+admin can control access with two system tables:
+
+user:([user]password)
+(if there is no user table everyone is allowed)
+
+access:([access,var,user])
+(if there is no access table everything is allowed)
+
+client:
+ http://user:password@host:port/?query
+ KDBC:	h:3:`host,port; h 4:"user:password"
+ ODBC:	DBQ=//host:port;UID=...;PWD=...
+ JDBC:	Properties p=new Properties;p.put("user",...);p.put("password",...);
+        Connection c=DriverManager.getConnection("jdbc:kx://host:port",p);
+
+admin(load script and server console) can do anything including k.
+views and stored procedures can do anything given 'select' access.
+
+the administrator can manipulate 'user' and 'access' 
+like any other tables or add to 'access' with grant.
+
+$grant all|{select|update|delete|insert}'s on all|var's to all|user's
+
+for example,
+
+$grant select on all to all
+$grant all on t to all
+$grant all on all to paul
+$grant insert on all to mary
+$grant update,delete on u,v,w to mary,peter
+
+admin tool: show'access'
+
+$grant save on all to mary	# for save/checkpoint access

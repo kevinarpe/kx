@@ -1,0 +1,14 @@
+
+KDB 2.5	2003-08-01
+ parallel	multiple slaves return results in partition order
+ time		millisecond display
+ timestamp	timestamp.{time|hhmmss|hhmm|hh}
+ largefile	k/kdb loaders can read files>2GB (e.g. taq)
+ parallel	recognizes year/month/date partitions
+ insert		':dir/t'insert ...
+ index		'..'index':dir/t'
+ asc		'..'asc':dir/t'
+ -l		fast logging. write but no synch.
+ hash		better float hash (e.g. timestamp)
+ null/fill	200*performance improvement
+ union/flatten	one row constant time

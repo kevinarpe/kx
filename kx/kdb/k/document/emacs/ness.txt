@@ -1,0 +1,31 @@
+I found the `base' files at:
+ftp://ftp.cs.washington.edu/pub/ntemacs/20.7/
+
+And picked up the `latest' version:
+emacs-20.7-fullbin-i386.tar.tz
+
+WinZip 8.0 does un-GZipping as well as un-Taring. No fussing with `MSDOS' is needed, nor with GZip or TAR
+
+Unzipped to D:\Program Files\EMacs
+It created \emacs-20.7 below this
+
+Click on addpm.exe in the `bin' subdirectory it creates an Icon that can be right-dragged to desktop
+(Create shortcut here)
+
+Target line -font fixedsys was unbelieveably ugly on my machine
+so I didn't use it and I much prefer to edit the `target' line by adding:
+-bg wheat -fg dimgrey -cr red     
+
+Remove the (setq process-encoding-system-alist ...) from the
+instructions to be placed in C:\.emacs  It is apparently a hack that
+is not needed in 20.7 and later.  
+
+Saving the .emacs file under that name proved to impossible where I was in ME,
+so I saved it under a different name and then went to a DOS box to rename it.
+That worked fine.
+        
+I did all of the above on my new machine which (temporarily, I hope) has Windows ME on it.
+I guess we can thank MicroSoft for giving us yet another operating systems, seemingly differing
+from its predecessors _only_ AFAICS in that it has more bugs, such that the above may
+differ somewhat on 9x, 2k, or NT boxes. Who knows?  (or cares, for that matter).
+

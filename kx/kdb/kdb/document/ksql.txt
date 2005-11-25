@@ -1,0 +1,41 @@
+order and function.
+
+in RDBMS, "relation" is an unfortunate term.
+
+1. it is wrong. in general sql tables are not relations.
+selects on relations often return non-relations.
+e.g. select part from partsupply
+
+sql92 gingerly treats tables as multisets.
+(select union intersect except join ...)
+
+sql92 is careful to remove ORDER BY from the select.
+(put the embarrassment outside the language in the cursor.)
+
+what if we embrace order? time-series analysis is easy.
+
+select ytdsales:sums sales from t
+select sales:deltas ytdsales from t
+
+2. it is misleading. keyed relational tables are functions. 
+what if we embrace functions? roll-up is easy.
+
+Most equi-joins and outer-joins are eliminated.
+
+All joins in the complex tpc-d queries disappear., e.g. tpc-d query 8
+
+... from lineitem where order.customer.nation.region='AMERICA' ...
+
+a natural index accesses a table/type with a field of that type.
+
+order.customer.nation.region is four natural-indices in a row.
+
+lineitem has field order which is of table/type order which
+has field customer which is of table/type customer which ...
+(fields have default eponymous type.)
+
+selects can disappear as well ... 
+
+rolodex['john'].phone       instead of
+
+select phone from rolodex where name='john'

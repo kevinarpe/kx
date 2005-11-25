@@ -1,0 +1,13 @@
+KDB 3.1
+ access
+   \\execute $grant all on all to user
+   (f;args)  $grant select on f to user
+ 
+ enums NUC: integers are always considered index. (not value)
+ avoid integer primary keys.
+ 
+ hotbackup 
+   -r|R NUC: replicate(asynch|synch/duplicate) FROM [host]port, e.g.
+ k db a.kdb -p 2001 -L
+ k db b.kdb -p 2002 -L -R 2001
+ if there is an access table the first user must have all(`).

@@ -1,0 +1,52 @@
+gui
+
+there are many ways to do front-ends for k-applications.
+ e.g. html, java, excel, vb and k
+ some pro's and con's ...
+
+vb pro: lots of features and 3rd party widgets
+   con: doesn't scale well?(data or complexity), windows only 
+
+k pro: fast, small, scalable, integrated(data driven), dynamic(..d's)
+  con: limited features
+(perhaps the major use of k-display is the table-widget)
+
+example: remote scroll
+
+easy from k, vb or java.
+the size of the table is irrelevant.
+the internet is fast enough that no local caching is necessary.
+e.g. if the thinnest connection is 56.6 kilobits an entire 
+page can come over and draw in a fraction of a second.
+you may want to special-case scroll-up/down by one-row.
+
+java given k server with table t:
+[download k/c.class from kx.com/a/k/connect]
+
+ k.c c=new k.c(host,port);		// connect
+// metadata
+ Integer count=(Integer)c.k("#*t[]");	// count
+ String[]fields=(String[])c.k("!t");	// fields
+
+// getfullpage
+ int start=0;
+ Object r=c.k("{t[;x+!10]}",new Integer(start));	// 10 at a time
+
+given kdb server:
+
+ Integer count=(Integer)c.k("count t");		// count
+ String[]fields=(String[])c.k("vars t");	// fields
+ Object r=c.k("select from t where $ within(?,?+9)",new Integer(start));
+
+// $ is ksql for rowindex -- handy for scrolling
+
+r is a page of data. draw it.
+every time the user pages or scrolls reset start and call again.
+
+in vb:   k("{t[;x+!10]}",start)
+
+/ k -i 1 t:.+(`a`b`c;3#,!100)
+h:3:`,1;s:0;n:10
+t..d:"h 4:(`t;(;s+!n))"
+.k..a:(`s`n;`t);.k..c:`form
+`show$`.k

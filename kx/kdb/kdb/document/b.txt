@@ -1,0 +1,139 @@
+kdb uses memory-mapped files and scratch space.
+RAM should be at least 6*biggest column size to avoid swapping.
+(enables fast multi-dimensional table scan aggregations.
+ number of columns (record width) has no effect on query performance.
+ batch updates are also simple and fast.)
+
+
+set SWAP(NT pagefile.sys) as big as possible, e.g. 2GB,
+or on LINUX/UNIX export KSWAP=large writable partition.
+
+
+the kdb software comes in 3 versions:
+
+
+(address space: nt(1.5GB) linux/unix(3GB))
+ scratch space: 6*biggest numeric column size)
+
+
+1. memory 	for database up to address - scratch. (a few million rows)
+2. shuffle	for field up to address - scratch. (up to 50 million rows)
+3. parallel	no limit.
+
+
+e.g. one kx customer's 50GB bond database is shuffle on solaris.
+(includes a table with 50 million rows and 200 columns.)
+
+
+a kdb database has tables, lists, atoms, views and functions.
+
+
+the process image is .k
+
+
+the disk image is a *.kdb file or a directory (with optional .kdb)
+
+
+[.kdb has all update transactions since the last save.
+ k db .kdb(or click on .kdb)loads and applies updates.
+ batch update .kdb's can be a dictionary (or absent).]
+
+
+large databases can be spread across many files and processors.
+  1. split database
+  2. split tables [shuffle] 
+  3. split fields [parallel]
+
+
+For example, in .t,
+
+
+s:2
+v:(2,3)
+t:([i:(1,2,3)]j:date['2000-01-04']+asc 3,s:('q','w','e'))
+save'd.kdb'
+
+
+ 1. a database can be spread across a directory.(*.l)
+
+
+\\del d.kdb
+'d'save('s','v','t')
+  
+ 2. a table can be spread across a directory. [vertical]
+    there will be a .l file that is (fields;attrs).
+
+
+\\del t.l
+'d'rsave't'
+
+
+ 3. a field can be spread across a directory. [parallel]
+
+
+ memory and shuffle kdb can handle splits 1 and 2.
+
+
+Q. we have memory-kdb. when should we split data or tables?
+A. when the data exceeds .5*RAM (build is easier, e.g. using bcp.k)
+
+
+Q. when should we switch to shuffle-kdb?
+A. when the database exceeds virtual memory.
+
+
+Q. when should we go parallel?
+A. when a field exceeds .25*RAM
+
+
+
+queries never cause diskwrite.(no swap)
+updates are sequential writes to log.
+
+
+ the end-user experience is the same.
+ the kdba experience gets harder.
+ our goal is zero-admin.
+
+
+Build database(.kdb) with .t(ksql), .s(sql) and .k(stored procedures).
+e.g. trade.t builds trade.kdb
+
+
+ksql>load database	# kdb,dsn,mdb,mdf
+ksql>load table	# csv,txt,dbf,l
+
+
+table column attributes (none required)
+..T type (date[,week,...],time,timestamp)
+..W width
+..P precision(2)
+..N nullable?(1)
+..D default
+
+
+..K primary key?	unique field(s) leading
+..S sort?		sorted, e.g. f=scalar, f within(l,h), t[scalar]		
+..T can point to table (enumerated: t; foreign: ,t)
+
+
+utilities in .d, e.g. \l db
+
+
+ .d.l`         ksql console
+ .d.r"..."     execute string/(f;args)/(enum;values)
+ .d.key[field;table]	(K)key field is brought to front
+
+
+Run database as server(k db ...) or embedded.
+
+
+Client front-ends are browser, excel, vb, java or k.
+communication is http, odbc, jdbc or underlying kdbc, e.g.
+
+
+ h:3:(host;port)				/ open
+ h 4:"tables"					/ tables
+ h 4:("select from t where i>?, f>?";(2;3.4))	/ query
+ h 4:(`func;(...;...;...))			/ call
+   3:h						/ close

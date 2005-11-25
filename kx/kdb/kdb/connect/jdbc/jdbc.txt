@@ -1,0 +1,40 @@
+should use kdbc -- http://kx.com/a/k/connect/java/c.java
+kdbc is easier, faster and more flexible -- c.k(func,args)
+the only reason for jdbc is already existing front-ends.
+
+
+jdbc.zip is a type-IV(100% pure java) jdbc2.0 driver for kdb.
+
+1. unzip http://kx.com/a/kdb/connect/jdbc/jdbc.zip in CLASSPATH/k(k.jdbc)
+2. download http://kx.com/a/kdb/connect/jdbc/test.java
+3. javac test.java
+4. k db -p 2001			run kdb server
+5. java test  			run client
+
+jdbc:kx://host[:port]  ('kx' is a registered sub-domain.)
+http://www.javasoft.com/products/jdbc
+
+matlab:(>>edit classpath.txt?) db =database('://host:port','','','k.jdbc','jdbc:kx')
+database(dbname,user,pwd,jdbc driver name,jdbc url)
+database(dbname,'scott','tiger','oracle.jdbc.driver.OracleDriver','jdbc:oracle:oci7:')
+
+kdb only supports TRANSACTION_SERIALIZABLE.
+kdb is autocommit(i.e. complex/batch transactions are done with procedures)
+except for simple batch update:
+
+ Connection c = DriverManager.getConnection("jdbc:kx://localhost:2001");
+ Statement s = c.createStatement();
+ c.setAutoCommit(false);
+ s.executeUpdate("insert ...");s.executeUpdate("insert ...");
+ c.commit();
+ c.setAutoCommit(true);
+
+one frontend viewer is dbvisualizer-2.0:
+
+download http://www.ideit.com/innovations/dbvis
+k db sp.s -p 2001	
+start dbvisualizer-2.0
+database/add database
+ jdbc driver:  k.jdbc
+ url: jdbc:kx://localhost:2001
+

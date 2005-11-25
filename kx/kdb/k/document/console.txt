@@ -1,0 +1,13 @@
+edit scripts with editor, e.g. notepad t.k 
+run scripts from console, e.g. c:\> k t
+ or VB/EXCEL immediate window, e.g. k"\l t"
+
+k.exe read/writes stdio
+ some use console
+ some use emacs, see: http://kx.com/a/k/document/emacs
+ 
+NT console
+ retrieve commands with up-arrow.
+ cut and paste with the mouse.
+ (check quick-edit in controlpanel/console).
+

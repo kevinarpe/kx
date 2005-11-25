@@ -1,0 +1,91 @@
+Here is my shot at the shortest Emacs tutorial!
+
+Getting started
+===============
+
+0. Intall emacs per the attached instructions.
+1. Install the attached .emacs file per the same instructions.
+2. Set up a directory in Explorer "c:\temp\crapdir\".
+3. Create two .k files "c:\temp\crapdir\crap1.k, crap2.k".
+4. Cut a 3/4 inch by 12 inch piece of paper.
+   Scotch tape it just over your f keys.
+   Write the following notes over the specified f-keys.
+   f1  = GoTo Line
+   f2  = Find File
+   f3  = Save File
+   f4  = Bury Buffer
+   f5  = Undo
+   f6  = Fund Mode
+   f7  = Beg Of Line
+   f8  = End Of Line
+   f9  = Split Screen
+   f10 = UnSplit Screen
+   f11 = Cursor Focus Switch
+   f12 = Last Buffer Switch
+
+Learning Emacs Editor
+=====================
+
+5. Execute emacs by double clicking on the icon.
+6. When emacs comes up, press f2.
+7. The "minibuffer" on the bottom will prompt you for a file.
+   Enter c:\temp\cra
+   and press space bar.  Emacs will complete crapdir for you.
+   Press enter.
+   Emacs will show you all the files in that dir (there are two).
+8. Click on or slightly to the left or right of file crap1.k.
+   Press the letter "f".
+   You will now open a "buffer" to edit crap1.k.
+9. Use the mouse or arrow keys to move around.
+   Type over or insert based on your keyboard's insert/overwrite setting.
+   Copy by click, hold, drag, release.
+   Paste by middlemouse (if you have an intellimouse or you're on Unix).
+   Else pulldown Edit on the taskbar and choose Paste.
+   Else just do ctl-y (for "yank" it out of the copy buffer).
+   Ctl-w is copy AND cut in one action.
+10. Block copies work as easily as a few characters.
+11. To save your changes press f3.
+    When you are prompted for a file name, press enter to save
+    over the file you started with OR enter a new name.
+12. If you make a mistake (or mistakes), press undo repeatedly
+    until you are in an acceptable state.
+12. To open another buffer, press f9.
+    To make the new buffer other that the default HALF size, drag the 
+    separator bar.
+13. To cycle the cursor's focus either mouse click or f4 or f11 or f12.
+    Observe the subtle differences between these options.
+14. To return to "full screen" on the buffer with focus, press f10.
+15. To create a new file, press f2 and enter a new name.
+16. If you are at a minibuffer prompt that you don't want to answer,
+    press ctl-g to escape.
+17. To find text, press ctl-s for search.  Enter target text at prompt.
+    To search in reverse, press ctl-r.
+    Repeated keystrokes find more occurances.
+18. To kill one of the buffers, press ctl-x-k.  You will be warned if
+    your edit has not yet been saved.
+19. At any point on a line, ctl-k kills to the right.
+
+Learning Emacs Console
+======================
+
+19. Type alt-x shell and press enter.
+    This starts an OS shell.  Your current directory will be the
+    one you "started in" in the icon.
+20. You can execute any OS command.
+21. Type K to get into K.
+22. Enter some line of K (like 1 2 3 4 5 6 7) and press enter.
+23. With the arrow key or mouse, go up to the line and press enter.
+    You just re-executed that line immediately.  This also works on results!
+24. Go up to the line with the mouse and click ANYWHERE along the line.
+    NOW right click.
+    You just brought part or all of the line down to be edited.
+    Edit it and press enter to execute it.
+25. Use the copy sequebce to copy a subset of the line.
+    Mouse click down to the executable entry point.
+    Press middlemouse to paste, then enter.
+    Or press ctly-y and enter.
+    Either of these two will execute the thing you pasted.
+    You could have edited the line before hitting enter.
+26. Copy and paste work well across buffers and the console is just
+    another buffer in this sense.
+    One problem is that cut & paste of a block INTO the console is broken.

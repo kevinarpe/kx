@@ -1,0 +1,34 @@
+temporal logic -- things that change over time
+
+1. what was the XOM bid at time 12:34:56?
+2. what was the XOM sym on date 1999-11-1? 
+3. what was the XOM split/dividend adjustment on date 1999-11-1?
+
+store raw, log change (sym,value,date), nest (value,date by sym) and
+then use binary search: t[sym].value at t[sym].date floor date
+
+for tick data: apply on the fly (millions per second)
+for daily data: can overlay adjustments at load time
+
+storing raw data can be a relief. corrections are instantly 
+accounted for instead of having to rewrite 500GB of data.
+
+e.g.,   x:'XOM'; t:time'12:34:56'; d:date'1999-11-1'
+
+1. q[x].bid at q[x].time floor t  # q:select bid,time by sym from quote
+2. s:sm[x].sym at sm[x].date floor d  # sm:select sym,date by mas from master
+3. a:am[s].adj at am[s].date floor d  # am:select adj,date by mas from adjust
+
+that was easy.  except that the adjustments are typically stored
+by symbol so we need to map them to master and then integrate them.
+
+master:([]sym,date,mas)
+adjust:([]sym,date,adj)
+ms:select mas,date by sym from master
+adjust:update adj:reverse prds reverse adj by mas from 
+ select mas:ms[sym].sym at each ms[sym].date floor each date from adjust
+
+Q: BI-TEMPORAL (what did we think at time z for times y) ?
+A: add a recorddate to the log and select ... where recorddate<x
+
+

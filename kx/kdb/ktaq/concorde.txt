@@ -1,0 +1,29 @@
+on thursday jan 4, 2001 steve miano, ed bierly, keith mason and i
+loaded 2.5 billion trades and quotes on a 50cpu linux cluster.
+
+simple table scans on one billion trades, e.g.
+
+select distinct sym from trade
+select max price from trade
+
+take 1 second
+
+multi-dimensional aggregations, e.g.
+
+/ 100 top traded stocks
+100 first desc select sum size*price by sym from trade
+
+/ daily high and close
+select high:max price, close:last price by sym, date from trade
+
+take 10 to 20 seconds
+
+translating the data from TAQ to kdb took about 5 hours.
+(steve had loaded the 200 TAQ cd's onto several disk drives.)
+
+distributing the 100gigabytes over the 100Mbit ethernet took 3 hours.
+(this cluster should probably have Gbit ethernet)
+
+loading the database (k db taq.m -P 2080), starting 50 slaves,
+connecting, mapping shared indicative tables over nfs, building
+parallel partitions, etc. took .1 second.

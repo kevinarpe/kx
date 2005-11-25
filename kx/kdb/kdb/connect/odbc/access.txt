@@ -1,0 +1,30 @@
+load access databases into kdb ...
+
+1. download and run kdbsetup.exe
+
+2. find files *.mdb
+
+3. right-click northwind.mdb and select 'kdb'
+
+sample query:
+
+select sum Quantity by OrderID.ShipCountry from OrderDetails
+
+with kdb
+1. click table 'OrderDetails'
+2. clickdown 'select' then 'sum' then 'sum Quantity'
+3. clickdown 'by' then 'OrderID' then 'OrderID.ShipCountry'
+4. click 'go'
+
+with excel2000
+1. excel
+2. data/pivot table
+3. external data source/next
+4. getdata
+5. msaccess
+6. .../northwind.mdb
+7. order details+/orderid>/quantity>
+8. order+/orderid>/shipcountry>
+9. next/next/next/finish/next/next/finish
+10. shipcountry to ROW
+11. quantity to DATA

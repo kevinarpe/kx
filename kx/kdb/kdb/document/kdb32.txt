@@ -1,0 +1,18 @@
+kdb3.2
+
+NEW
+
+webbrowser can view multiGB splay tables
+
+IMPROVED
+ rasc uses less space
+
+FIX
+groupedlink
+ e.g. select t[a].b by s from sp
+
+par.txt dates returned in ascending order
+ e.g. select from trade where date=,sym='AB'
+
+float"" is 0n
+

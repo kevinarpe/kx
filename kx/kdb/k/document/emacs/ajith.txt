@@ -1,0 +1,20 @@
+
+(i) downloaded NTEmacs from the http://www.mozart-oz.org website - a one
+step process;
+(ii) from the Windows taskbar ran the downloaded file to install Emacs;
+(iii) using Windows Explorer, created a desktop shortcut to Emacs;
+(iv) right clicked the desktop icon for Emacs to select the "Properties"
+menu item and then appended the recommended color options to the "Target
+line"; 
+(v)copied the .emacs file from the K website to my directory; and
+(vi) double-clicked the Emacs icon on the desktop and within Emacs typed
+escape, x, shell, enter and typed K as recommended. It worked! (At least
+most of the time, it worked - my unfamiliarity with Emacs accounts for the
+times when it did not work, as I am not always certain which buffer is
+active.)
+
+I see from the various postings that the consensus of the K experts is to
+move away from Emacs and use a combination of simpler Windows
+tools/techniques. Well, I will try out Emacs for a while at least - the
+integration of editing and executing code within one environment seems worth
+testing out further.

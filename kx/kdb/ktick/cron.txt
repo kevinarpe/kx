@@ -1,0 +1,4 @@
+50 18 * * 1-5 k/k db tdb/taqh.t -p 2010 -P 3010     </dev/null >>k/tdb.log 2>&1
+45  7 * * 1-5 k/k tdb tdb/taq.t -p 2011 -l -s 18:45 </dev/null >>k/tdb.log 2>&1
+46  7 * * 1-5 k/k db tdb/rtdb.t -p 2012 -P 3012     </dev/null >>k/tdb.log 2>&1
+

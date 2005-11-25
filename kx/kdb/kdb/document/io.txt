@@ -1,0 +1,46 @@
+kdb2 splits into two cases.
+
+ oltp/realtime/memory  up to 1,000,000 updates per second(bulk synchronous log).
+ olap/dss/historical   several million search/aggrs/joins/rollups per second.
+
+some applications, e.g. our analytic tick database, use both.
+
+olap kdb has no size limit.  RAM should be 6* biggest column partition.
+oltp kdb must fit in memory. RAM should be 2* realtime image.
+*when building kdb from file RAM should be 3* processing chunk.
+(use unix utilities to split flat files that are too big.)
+
+for example, our tick database partitions by day.
+(4,000,000 trades and 6,000,000 quotes for about 300MB.)
+each historical process needs 6*8*6,000,000 of RAM for fast queries.
+the realtime database needs 2*300MB of RAM for fast updates and queries.
+loading each TAQ cd(2 days of 300MB each) needs about 500MB of RAM.
+
+at the end of the day the entire oltp database is sorted
+by symbol and written as the next historical partition -
+which only takes a few seconds.
+
+a kdb database is about the same size as the raw data or text.
+http://kx.com/a/kdb/document/type.txt
+http://kx.com/a/kdb/document/load.txt
+
+rules of thumb:  where possible ...
+
+1. buy lots of memory
+2. do SCSI3 - not IDE (20/40MB versus 2/4MB)
+3. do local - not remote (100MB versus 1MB)
+4. do data - not text (20MB versus 2MB)
+5. do kdbc - not odbc/jdbc (1,000,000 versus 100)
+   (odbc/jdbc is ok for aggregation queries.)
+
+a typical partition build, e.g. TAQ,
+
+('types';widths)load'file'   20MB/sec
+[enumerate][delete][sort]    20MB/sec
+rsave			     20MB/sec
+
+45 seconds per 300MB day.
+
+every major operation requires roughly 2*elbow room.
+
+
