@@ -10,7 +10,7 @@ typedef struct k0{I c,t,n;struct k0*k[1];}*K;
 #define Ki(x) ((x)->n)
 #define Kf(x) (*KF(x))
 #define Kc(x) (*(UC*)&(x)->n)
-#define Ks(x) ((S)(x)->n)
+#define Ks(x) (*(S*)&(x)->n)
 
 /* list accessors, e.g. KF(x)[i]=2.0 */
 #define KI(x) ((I*)((x)->k))
@@ -26,7 +26,7 @@ extern "C" {
 extern S sp(S); /* symbol from phrase */
 
 /* atom generators, e.g. gi(2),gf(2.0),gc('2'),gs(sp("2")) */
-extern K gi(I),gf(F),gc(C),gs(S),gn();
+extern K gi(I),gf(F),gc(C),gs(S),gn(void);
 
 /* list generator (t as in 4::), e.g. gtn(-1,9) integer vector */
 extern K gtn(I t,I n);
@@ -36,7 +36,7 @@ extern K gp(S),gpn(S,I);
 
 /* error, e.g. if(x->t!=-1)return kerr("need integer vector");*/
 extern K kerr(S),gsk(S,K),gnk(I,...),ci(K),ksk(S,K),kap(K*,void*);
-extern I cd(K),jd(I),dj(I),scd(I),sdf(I,I(*)()),sfn(S,K(*)(),I);
+extern I cd(K),jd(I),dj(I),scd(I),sdf(I,I(*)(void)),sfn(S,K(*)(void),I);
 
 #ifdef __cplusplus 
 }
