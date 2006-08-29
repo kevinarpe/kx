@@ -1,0 +1,39 @@
+runtime error
+
+domain !-1       out of domain
+index ()1        out of bounds
+int !2.3         expected integer
+length ()+!1     incompatible lengths
+limit            can't converge on function inverse
+loop v..d:"v"    dependency or 4: loop
+nonce ""_binl""  not supported yet
+permission       exceeded evaluation limits
+rank ?5          invalid rank
+sigfpe           floating point exception
+stack {_f[]}[]   Ran out of stack space
+stop ^c	         user interrupt(ctrl-c)
+type -`          wrong type
+valence +[2;3;4] wrong number of args
+value            no value
+wsfull  0I#2     not enough addressability
+.. system(file and ipc) errors
+
+parse error (execute or load)
+
+open       open ([{ or "
+unmatched  unmatched ([{}])
+parameter  invalid parameter
+syntax     invalid syntax
+character  invalid character
+nest       nested too deep
+statement  invalid statement
+reserved   invalid _word
+
+reference error
+
+lambdas({a.b}), dependencies(v..d:"a.b") and expressions(."a.b")
+can have hardcoded global variable references. the system can't
+reassign the parent dictionary, e.g.  a:a.b is an error
+
+errors can be avoided by making references dynamic, e.g. {a[`b]}
+

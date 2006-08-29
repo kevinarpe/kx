@@ -1,0 +1,98 @@
+k2.3 11/23 patch
+
+FIX 
+NT  excel/vb: handle "unexpected type"'s
+NT  gui: certain situation could lose focus
+NT  dynamic load: LOADLIBRARY should use '\\'
+NT  mainloop: handle WM_NULL and HWND_BROADCAST 
+ (many thanks to bruce schreiber for tracking this down)
+
+k2.3 9/22 release notes
+
+FASTER
+
+faster sort
+ int, float and varchar(symbol) sorts are all 
+ average time linear. worst case is n*log2 n.
+ downgrade(>:) is the same speed as upgrade(<:).
+
+faster search(join), group and unique for floats and varchar.
+
+floating point sort and search is .8 million per second.
+int and varchar sort and search are 8 million per second.
+(if domains are relatively small)
+
+faster < > = for floats.
+
+faster x f/y and x f\y (same speed as f/x and f\y)
+
+faster <': >': =': for characters
+
+faster pointer chase: v/x	v\x 
+
+NEW
+ 
+NT: kr.exe errors to messagebox, e.g. '"multi\nline\nerror"
+NT: `f 1:... can overwrite already mapped f(UNIX emulated)
+
+ on-line documentation. \ for listings
+
+ antecedents and dependents, e.g.	
+  a..d:"b+c"
+  d..d:"a+2"
+
+  \i a
+ante: .k.c .k.b
+post: .k.d 
+
+ _sv is {z+x*y}/[0] instead of {y _dot|1*\|1_ x}
+ (the latter had some unnecessary integer overflows)
+
+ k servers can return user-defined errors to clients.
+
+ dictionary _di entries	can handle multiples
+
+ text processing
+
+  x _sm y	string match patterns can use:   *?[^-]
+  x _ss y	string and word(if symbol y) search with: ?[^-]
+  _ssr[x;y;z]	string and word replace. z can be a monadic function. 
+
+_ss is non-overlapping fixed width(* nonce).
+word: non-alphanum boundary
+warning: *?[] are special characters. y is null-terminated.
+
+_sm and _ss are string-atomic.
+_ss searches up to 100 million characters per second.
+
+for example:
+
+/ word search and replace
+  s:"adam had a pear"
+
+  _ssr[s;"a";"the"]		/ replace string
+"thedthem hthed the pether"
+
+  _ssr[s;`a;"the"]		/ replace word
+"adam had a pear"
+
+/ kdb sql92 parameters
+  s:"update t set i=?, f=?"
+  _ssr[s;"[?]";$(2;3.4)]
+"update t set i=2, f=3.4"
+
+/ url processing
+  hc:"%","0123456789ABCDEF"16 _vs _ic*:	/ hex from char
+  ch:_ci 16 _sv"0123456789ABCDEF"?/:1_	/ char from hex
+  c:"i=2&f=3.4"				/ part of the url
+  h:"i%3D2%26f%3D3.4"			/ what comes across
+
+  _ssr[c;"[=&]";hc]
+"i%3D2%26f%3D3.4"
+
+  _ssr[h;"%??";ch]
+"i=2&f=3.4"
+
+FIX !0I	check for wsfull
+NT `4:"os command" uses better tempfile(sometimes got "access denied")
+

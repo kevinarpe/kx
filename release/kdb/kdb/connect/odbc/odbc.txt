@@ -1,0 +1,40 @@
+kdbsetup.exe installs the kdb odbc driver and DSN _kdb.
+
+start a server, e.g. k db trade.t -p 2001 -d
+
+_kdb will prompt for host:port, e.g. localhost:2001
+
+we can add a user DSN with the odbc data source admin:
+
+ control panel/ODBC DSN/add/KDB/ [host:port]
+ the user DSN is given the name //host:port
+
+some front-ends:(formulate aggregation queries so server does the work)
+
+.net (csc class.cs /r:"/program files/microsoft.net/odbc.net/microsoft.data.odbc.dll")
+
+msquery 
+ turnoff query-wizard. link to primary keys. turnoff records/autoquery
+
+excel (install ODBC_addin tools/add-ins/ODBC/ok)
+ =sql.request("driver=kdb;dbq=//localhost:2001",,,"select avg(price) from trade")
+ get external data/msquery...
+
+vb/data[connect: odbc;driver=kdb;dbq=sp.s defaulttype: useodbc recordsource: s]
+   text[datafield: s datasource: data1] 
+vb/immediate
+ set r=createobject("adodb.recordset")
+ r.open"select sum(qty) from sp","driver=kdb;dbq=sp.s",,,adcmd
+ m=r.getrows()  ' ?m(0,0) etc.
+
+delphi4 sometimes rejects the user DSN filenames. delphi5 is ok.
+crystalreports/new/standard/sql|odbc ODBC - _kdb
+access/get external data/import/files of type(ODBC)/...
+visualfoxpro/project/databases/data/connections/...
+sqlserver7.0 dtswizard/import
+WinSQL http://www.imranweb.com/freesoft
+
+kodbc has read-only static cursors(like sqlserver7).
+
+please report problems to tech@kx.com
+

@@ -1,0 +1,53 @@
+stored procedures(and functions) are written in k, e.g.
+
+\f:{[a;b]a+b}
+ 
+and called from clients by string or (funcs;args), e.g. JAVA
+
+k("f[2,2.3]")
+k("f",new Integer(2),new Double(2.3))
+
+use .d.r to call back into KSQL:
+
+.d.r"..."           e.g. .d.r"n last a union b"
+.d.r("...";args)	e.g. .d.r("? last a union ?";(n;b))
+.d.r(`func;args)	e.g. .d.r(`last;(n;.d.r(`union;(a;b))))
+
+.d.r has access to all of KSQL. 
+
+for convenience, some funcs can be called directly:
+
+.d.insert[table;values]  (short for: .d.r(`insert;(table;values)))
+.d.select[table;groups;aggrs;constraints]
+.d.update[table;groups;unifs;constraints]
+.d.delete[table;fields;constraints]
+
+insert, update and delete have side-effect for `table
+and result for table, i.e. t:.d.insert[t;u] is .d.insert[`t;u]
+
+groups, aggrs/unifs and constraints are lists of parse trees.
+
+parse trees are (func;arg0;arg1;...). identifiers are `x.
+varchar constants are (;`x) (to distinguish from identifiers), 
+e.g. parse tokenize ...
+
+.d.p .d.t"select qty:sum qty by s.city from sp where p.city='paris'"
+
+UTILITIES
+.d.cut[c;s]	/ cut string s at character c
+.d.join[c;s]	/ join strings s with character c
+
+.d.cd		/ csv from data
+.d.dc		/ data from csv
+
+KDB CLIENT
+
+.d.tl / table from list (fields;data;types)
+.d.lt / list from table
+
+e.g. r:.d.tl h 4:"select ..."
+
+
+
+
+

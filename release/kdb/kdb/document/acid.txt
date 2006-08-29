@@ -1,0 +1,42 @@
+ACID
+
+atomicity, consistency, isolation and durability
+are easily met with kdb.
+
+kdb serializes update transactions.
+no locks, no deadlock, no problems.
+(kdb also provides the best performance.)
+
+one of the worst things about the traditional rdbms's 
+is the possibility of deadlock and unexpected rollback.
+
+cf. "guide to sybase and sql server" pp.295(mcgovern,date)
+
+"any operation that requests a lock - which means
+ any executable sql operation - may be rejected ...
+ The problem of deadlock is a significant one for
+ the application programmer. For example,
+
+ execute SQL statement
+ if(error_code = value indicating deadlock victim)
+ begin
+  rollback
+  reinitialize variables from initial input data
+  goto beginning of program
+ END"
+
+that's a lot of code and a lot of trouble.
+and now we need to spend more money
+and time on a transaction server.
+
+Q. why did they do that?
+
+A. because they assumed read/writes had to randomly access disk.
+therefore blocked. therefore used more processes.
+(some may have been tempted with long running transactions
+but pending write-locks kill a database anyway.)
+
+Q. how can we be both simpler and faster?
+
+A. we avoid random disk access. we don't block.
+we use memory more effectively.

@@ -1,0 +1,54 @@
+kdb2.2
+
+2000-11-01
+ ERROR		FILE: ... LINE: ...
+ -e		error trap(default is debug)
+
+2000-10-23
+ <f's>index't'	set(query) indices
+ ''index't'	clear indices
+ save'*.kdb'	NUC(initial save)
+ save''		checkpoint
+
+2000-10-16
+ odbc		_kdb prompts for host and port
+ trim		remove leading and trailing blanks
+
+2000-10-05
+ parallel	*.m(machine directory [slaves])
+ jdbc		http://kx.com/a/kdb/connect/jdbc/jdbc.zip
+		if(statement.execute(s)){r=statement.getResult();}
+2000-09-27
+ http		-N maximum number of items returned
+ parallel	n first select ...
+ parallel	select distinct ... from t
+ parallel	distributed: http://kx.com/a/kdb/document/census.m
+
+2000-08-23	no expiration
+
+2000-08-09
+ parallel	smp. http://kx.com/a/kdb/examples/census.t
+ html		leave character vector as is
+ ''''		FIX nested quote parsing
+
+2000-07-18
+ -f		full precision text export(csv/txt/xml/html)
+ substring	text(as well as varchar)
+ save't.csv'	also t.txt and t.l
+
+2000-07-10
+ lower,upper	string functions
+ sum,prd	go to float
+ sqr		atomic function
+ delete		fix from 2000-07-04
+
+2000-07-04
+ column views	e.g. view trade.volume price*amount
+ aggregations	variance, deviation, covariance, correlation		
+ prev, next	new uniform functions. fill element is null
+ strings	string+string,  (index,length)substring ...
+ keywords	list of reserved words
+ deltas, ratios	NUC default initial state is first element
+ load		NUC xls,mdb,mdf etc. is incremental
+ insert		FIX empty tables preserve declared type
+ (?,'?')	FIX ignore quoted ? in parameter passing

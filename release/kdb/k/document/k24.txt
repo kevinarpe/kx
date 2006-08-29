@@ -1,0 +1,49 @@
+k2.4t2/4
+
+NEW
+  ~`v. to `v
+  stack increased
+  syms _binl syms
+  _sm _ss _ssr matching "[[]" and "[]]"
+  6:f ; f 6: read/write bytes(instead of `f 0: and"c"1:)
+  _lsq accepts integer arguments
+  _a is ip-address (every message has _w _u _a)
+  ("cbsifd";1 1 2 4 4 8)1:... width checks
+  "\r" for carriage return
+
+NT 
+ excel/vb calls k: expanded datatypes BYREF
+ http://kx.com/a/kd/connect/vb.txt
+
+ k calls excel/vb: sub and function
+ http://kx.com/a/k/connect/vb.txt
+
+ oem fonts, e.g. \m f courier new-12-bold-oem
+
+NUC
+ !"invalid" !`invalid VALUE ERROR(instead of _n)
+ ("IF";..)0: to 0N0n if invalid(instead of domain error)
+ "",/() preserves prototype(instead of ()) 
+ _inv:{((2##*x)#1,&#*x)_lsq x}
+ 0%0 is 0n instead of 0.0
+ _ss and _ssr`word include '_' as alphanumeric
+
+GUI
+  backspace clears(like EXCEL); ESC for insert mode
+  `show$ doesn't closeout edit(certain redraws would cause enter)
+  trim trailing blanks in edit buffer before passing back.
+
+NEW
+
+keys
+ v..ins,del,f1...f12,ctrl_a...ctrl_z
+ v..kl	click label(red)(NT title K for toplevel)
+
+dialogs(_n on cancel)
+ x:`4:(`menu;IFS)     / (`menu;`a`b`c)
+
+NT
+ f:`4:(`open;type[s][;title]) / (`open;`l`txt)
+ f:`4:(`save;type[s][;title]) / (`save;`l`txt)
+ b:`4:(`okcancel;line[s][;title])
+   `4:(`ok;lines[s][;title])	/ (`ok;("extreme";"speed"))

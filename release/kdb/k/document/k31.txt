@@ -1,0 +1,19 @@
+NEW
+
+_s	used allocated mapped highwatermark
+
+linux and solaris split (windows interleaves) the
+addressability among heap and mmap.
+
+IMPROVED
+
+f 1:..	
+
+filewrite uses a buffer so that highly nested objects
+are written faster.
+
+NUC
+
+2004.01.11 _dv change from{x _dvl,y}to{:[4:x;x@&~x=y;x _dvl,y]}
+2004.02.29 _dv revert to  {x _dvl,y}
+ 

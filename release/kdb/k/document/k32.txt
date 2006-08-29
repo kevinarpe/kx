@@ -1,0 +1,6 @@
+NEW
+
+K3HOME	(default is $HOME/k)
+ \l s.k looks in current directory then K3HOME
+
+k3.lic	type 2(development) has 4 hour timeout

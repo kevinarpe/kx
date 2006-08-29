@@ -1,0 +1,22 @@
+SCALABILITY
+
+A standard for databases up to 2GB/UNIX or 1GB/NT.
+B shuffle for columns up to .25*RAM. no limit on database.
+C parallel has no limit.
+
+queries (search, sort, summarize) run at several million records per second. 
+kdb is indifferent to the number of fields in tables.
+kdb is usually indifferent to the number of tables in queries.
+ e.g. tpc-d query 8 is a 9-way join. kdb executes linear to lineitem size.
+kdb(parallel) runs almost as fast from disk as from memory.
+
+record lookup is constant or log depending on hash or sort respectively.
+aggregation is linear in table length or linear in subselect if sort applies.
+
+update:
+linear in size of the transactions. indifferent to database size.
+between minimum and inverse sum inverses of network, memory and disk rates. 
+
+bottom line:	kdb scales
+
+

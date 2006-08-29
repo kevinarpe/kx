@@ -1,0 +1,23 @@
+k2.6 1999-10-14
+
+NUC
+lexicographic sort on strings instead of length
+e.g. "abd" is now before "ad"
+
+NEW
+\e 2		exit program on error
+_exit code
+_host addr	name from addr. (also addr from name)
+k f.sh		scripts don't have to be .k
+..kr		clickright
+..klr		clicklabelright
+`f 5:n		truncate to n(or drop -n) for vectors
+0$		0I(and -0I) for out of range
+
+FASTER
+&x		speed up from 14million to 60million per second
+x _dot y	speed up I F and F I cases
+
+NT
+0.0$		improve performance
+vb		_fpreset()	floating point reset before returning

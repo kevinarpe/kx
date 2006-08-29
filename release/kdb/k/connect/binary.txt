@@ -1,0 +1,52 @@
+k messages(see _bd) and files(see 6:) are similar.
+types are 6(null) 5(dict) 4 3 2 1 0 -1 -2 -3 -4 (nested 8 byte aligned binary)
+scalars are [-3 1]{int type;value}  (floats are {2,0;value})
+vectors are [-3 1]{int type,length;data...} (charvec has trailing\0)
+all objects start on 8 byte boundaries.
+messages(_bd have leading {char littleendian,type,0,0;int length})
+file objects have leading [-3 1] (overwritten by mmap for refcount).
+types -1 -2 -3 are special in that they can be mapped in place.
+_n is (6 0). dict is nested list of nested triples(5 n 0 3 .. 0 3 .. ..).
+
+ `a 1:a:(`stock`amount;(`aaa`bbb`ccc`dd`xx`yyyy;1 2 3 4 5 6))
+
+ 6:`a is a list of bytes that is:
+
+-3 1  0 2
+ -3 1 -4 2 stock.amount....
+ -3 1  0 2
+  -3 1 -4 6 aaa.bbb.ccc.dd.xx.yyyy..
+  -3 1 -1 6 1 2 3 4 5 6
+
+(integers represent 4 bytes and . indicates \0)
+
+_bd a (1 104 then the rest without the [-3 1]'s)
+
+notes:
+the odd ones are float(2 0 2.3) and charvec(-3 4 asdf\0).
+symbols are pointers in k but strung out on file and message.
+kdb splay tables are the columns in files plus:
+dir/.l which is (files;attrs)
+the attrs are _n or dicts of `T(type)`S(sort)`I(index(s))
+e.g. the taq/20001002/trade/.l is
+(`date`sym`time`price`size`cond`ex
+ (.,(`S;1;);.((`T;`sym;);(`S;1;);(`I..);..)
+
+-3 1 0 2
+-3 1 -4 7 date.sym.time.price.size.cond.ex........
+ -3 1 0 7
+   -3 1 5 1 -3 1 0 3 -3 1 4 S... -3 1 1 1 -3 1 6 0
+   -3 1 5 3 -3 1 0 3 -3 1 4 T... -3 1 4 sym. -3 1 6 0
+            -3 1 0 3 -3 1 4 S... -3 1 1 1 -3 1 6 0
+			-3 1 0 3 -3 1 4 I... -3 1 0 2 
+			 -3 1 -1 8937 ... values
+			 -3 1 -1 8938 ... start positions
+   ...
+   
+    
+  
+
+
+
+
+
