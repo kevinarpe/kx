@@ -1,2 +1,0 @@
-2000-10-14	_T (double precision timestamp)
-2000-10-04	`v _setenv "..."

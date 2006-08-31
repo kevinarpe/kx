@@ -1,1 +1,0 @@
-\.d.load[(*0:`dst.txt),"/taq"]
