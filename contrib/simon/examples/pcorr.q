@@ -1,3 +1,4 @@
+/ parallel correlation of timeseries 
 k)comb:{(,!0){,/(|!#y),''y#\:1+x}/x+\\(y-x-:1)#1}
 / d - date
 / st, et - start time, end time
