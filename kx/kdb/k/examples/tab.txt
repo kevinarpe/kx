@@ -1,3 +1,0 @@
-stock	price	amount	date
-xxx	123	23	19970102
-yyy	45	-110	19970203
