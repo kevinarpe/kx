@@ -6,7 +6,7 @@
 //Use the functions without numbers in the titles.
 //
 //The non-adverbial functions are necessarily exponential. Precompute the tables.
-//The design criteria was shortness, not speed.
+//The design criteria was shortness, not speed. Most are still fast.
 //
 //Apply list function recursively, once at each depth "eachup[asc;m]"
 eachup:{:[@y;y;x _f'[x;y]]};
