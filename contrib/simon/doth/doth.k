@@ -10,5 +10,5 @@ sc:htac[`script;(,`type)!,"text/javascript"]"\nwindow.onload = function(){sortTa
 html:{htc[`html]htc[`head;sa,sb,sc],htc[`body]x}
 fram:{htc[`html]htc[`head]htc[`title;x],htac[`frameset;(`frameborder`cols)!("0";($116|316&43+(7+"?"~*z)*|/#:'y),",*")]@,/hta[`frame]'((,`src)!,*z;`name`src!`v,,*|z)}
 
-.z.ph:{$[~#x:uh x:$[@x;x;*x];fram[$.z.f;x]("?";"?",*x:$."\\a");"?"=*x;html@,/$[~#x:1_x;htbl([]table:{hb["?",x]x}'$."\\a");"["=*x;jx["J"$1_x]R;jx[0j]R::. x]
+.z.ph:{$[~#x:uh x:$[@x;x;*x];hy[`html]fram[$.z.f;x]("?";"?",*x:$."\\a");"?"=*x;hy[`html]html@,/$[~#x:1_x;htbl([]table:{hb["?",x]x}'$."\\a");"["=*x;jx["J"$1_x]R;jx[0j]R::. x]
  "?"in x;hy[t]@`/:tx[t:`$-3#n#x]@.(1+n:x?"?")_x;"."in x;hy[`$|(x?".")#x:|x]"c"$1:hm x;"error"]}
