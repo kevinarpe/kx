@@ -1,6 +1,6 @@
 Q=/home/niall/q/l64
 INCLUDES=-I. -I/usr/share/R/include
-LIBS=${Q}/c.o -lpthread -L/usr/lib/R/lib/ -lR
+LIBS=-lpthread -L/usr/lib/R/lib/ -lR
 
 CC=gcc
 CFLAGS=-g -O -fPIC -m64 -shared

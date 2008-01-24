@@ -775,9 +775,9 @@ SEXP kx_execute(SEXP connection, SEXP query)
  */
  
 extern Rboolean R_Interactive;  /* TRUE during interactive use*/
-Rboolean R_Quiet;        /* Be as quiet as possible */
+extern Rboolean R_Quiet;        /* Be as quiet as possible */
 extern Rboolean R_Slave;        /* Run as a slave process */
-Rboolean R_Verbose;      /* Be verbose */
+extern Rboolean R_Verbose;      /* Be verbose */
 
 /*
  * We need to borrow several of the R runtime functions as well.
@@ -983,7 +983,7 @@ void jump_now(void)
  * Take a copy of the string held in x.
  */
 static char* copy(K x) {
-	char *result = "";
+	char *result = calloc(1, 1);
 	size_t length;
 	if (-KS == x->t) {
 		length = strlen(x->s);
