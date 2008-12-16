@@ -3,6 +3,7 @@
 / example: chart chartsize[150 200] charttype[`lc] axistype[`x`y] axislabel[(`mar`apr`may`jun`jul;``50Kb)] simpleencode[26?60] title["kdb+"] endchart
 /\d .gc
 CMDDELIM:"&"
+img:{"<img src=\"",x,"\" />"} / img chart ..
 chart:{"http://chart.apis.google.com/chart?",x}
 endchart:""
 simpleencode:{chd"s:",$[0h=type x;brc simplelookup each x;simplelookup x]}
