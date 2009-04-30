@@ -27,8 +27,6 @@ namespace Kdbplus.Linq
         {
             var formatter = new QFormatter();
             formatter.Visit(expression);
-//            string format = string.Format("c:{1}\nb:{2}\na:{3}\n?[{0};c;b;a]", t, c, b, a);
-
             return formatter.sb.ToString();
         }
 
@@ -253,7 +251,7 @@ namespace Kdbplus.Linq
                     return  "|";
                 case ExpressionType.Equal:
                     return "=";
-                case ExpressionType.NotEqual:
+/*                case ExpressionType.NotEqual:
                     return "<>";
                 case ExpressionType.LessThan:
                     return "<";
@@ -277,7 +275,7 @@ namespace Kdbplus.Linq
                 case ExpressionType.Modulo:
                     return "%";
                 case ExpressionType.ExclusiveOr:
-                    return "^";
+                    return "^";*/
                 default:
                     throw new NotSupportedException(b.NodeType.ToString());
             }

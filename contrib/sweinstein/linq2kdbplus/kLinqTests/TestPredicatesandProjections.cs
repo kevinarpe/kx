@@ -93,7 +93,7 @@ namespace KLinqTests
         [Fact]
         public void WhereStrColEq()
         {
-            var qry = ktc.sRecord.Where(supRow => supRow.city == "london");
+            var qry = ktc.sRecord.Where(s => s.city == "london");
             CheckTranslation("?[s;enlist (=;`city;enlist `london);();`city`name`s`status!(`city`name`s`status)]", qry);
         }
         [Fact]
