@@ -5,7 +5,7 @@ htbl:{g:{(#*y)#'(,,"<",x),y,,,"</",x:($x),">"};
 	,/htac[`table;(,`class)!,"striped"](htc[`thead]htc[`tr]@,/htc[`th]'$!x),htc[`tbody]@,/,/'+g[`tr]@,/`td g',:'$. x:+0!x}   
 
 sa:htac[`style;(,`type)!,"text/css"]"@import 'doth.css';"
-sb:htac[`script;`type`src!("text/javascript";"jquery.js")]""
+sb:htac[`script;`type`src!("text/javascript";"http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js")]""
 sc:htac[`script;`type`src!("text/javascript";"doth.js")]""
 html:{htc[`html]htc[`head;sa,sb,sc],htc[`body]x}
 fram:{htc[`html]htc[`head]htc[`title;x],htac[`frameset;(`frameborder`cols)!("no";($116|316&43+(7+"?"~*z)*|/#:'y),",*")]@,/hta[`frame]'((,`src)!,*z;`name`src!`v,,*|z)}
