@@ -4,11 +4,11 @@
 <array>
 	<dict>
 		<key>name</key>
-		<string>Q</string>
+		<string>kdb+</string>
 		<key>file</key>
-		<string>q</string>
+		<string>kdbplus</string>
 		<key>extensions</key>
 		<string>q k</string>
 	</dict>
-</array>
-</plist>
+
+ADD THIS TO THE BEGINNING OF THE FILE 
