@@ -1,8 +1,0 @@
-[first]
-bar:%(baz)s/grape
-baz:banana
-bak:orange
-[DEFAULT]
-bat:%(baz)s
-baz:apple
-qux:%(bak)s
