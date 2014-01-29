@@ -136,7 +136,7 @@ customertypeprofiles:{[startdate;enddate;timebucket]
  exec C#custtype!usage by time:`timestamp$2000.01.01+time from t}
 
 /----------------------------------
-/- CUSTOMER TYPE / REGION analytics
+/- DAILY STATISTICS
 /----------------------------------
 
 /- daily analysis for each customer
@@ -151,9 +151,18 @@ dailystats:{[startdate;enddate]
   from meter 
   where date within (startdate;enddate)}
 
+/- same as dailystats but optimized for slave usage
+dailystatsoptimized:{[startdate;enddate]
+  select usage:(last usage) - first usage, stats:{(max;min;avg)@\:1 _ deltas x}usage
+  by date,meterid
+  from meter
+  where date within (startdate;enddate)}
+
 /---------
 /- BILLING
 /---------
+
+
 
 
 
