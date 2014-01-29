@@ -5,7 +5,7 @@
 @[system;"l smartmeterfunctions.q";{-1"Failed to load tutorial.q : ",x;exit 1}]
 
 /- Load the HDB
-hdbdir:$[0=count .z.x;"./hdb";.z.x 0]
+hdbdir:$[0=count .z.x;"./smartmeterdb";.z.x 0]
 @[system;"l ",hdbdir;{-1"Failed to load specified hdb ",x,": ",y;exit 1}[hdbdir]]
 
 /- turn on garbage collection
@@ -17,7 +17,8 @@ hdbdir:$[0=count .z.x;"./hdb";.z.x 0]
 .tut.add["monthlyusagebycusttype[2013.08 2013.09m]";"Total monthly usage by customer type for a given set of months"];
 .tut.add["meterusagepivot[2013.08.01;2013.08.31;0b]";"Total meter usage pivotted by customer type and region"];
 .tut.add["meterusagepivot[2013.08.01;2013.08.31;1b]";"Total meter usage pivotted by customer type and region as a %"];
-.tut.add["dailystats[2013.08.01;2013.08.10]";"Daily statistics for each meter including flow rates to the customer"];
+.tut.add["dailystats[2013.08.01;2013.08.12]";"Daily statistics for each meter including flow rates to the customer"];
+/ .tut.add["dailystatsoptimized[2013.08.01;2013.08.12]";"Daily statistics for each meter including flow rates to the customer, with optimized implementation for slaves"];
 .tut.add["groupusage[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15]";"Time bucketed usage stats for a set of meterids aggregated together"];
 .tut.add["dailyaverageprofile[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15]";"Time bucketed usage, averaged over a date range, for a set of meter ids"];
 .tut.add["comparetoprofile[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15;2013.08.01;2013.08.31;exec meterid from static where custtype=`ind]";"Compare average daily volume profiles e.g. for different time periods, different customer types etc."]
@@ -29,6 +30,10 @@ hdbdir:$[0=count .z.x;"./hdb";.z.x 0]
 -1"The usage value is the total cumulative usage to date.";
 -1"The time is the time the update was received.";
 -1"The static table contains the associated lookup data for each meter.";
--1"Each meter belongs to a specific customer type in a specific region.";
+-1"Each meter belongs to a specific customer type in a specific region.\n";
+-1"The customer type distribution is:";
+show select number:count i by custtype from static;
+-1"\nThe region distribution is:";
+show select number:count i by region from static;
 
 .tut.info["SMART METER DEMO"]

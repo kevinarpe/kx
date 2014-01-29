@@ -50,13 +50,15 @@ gcOFF:{.tut.gc:0b}
 help:{
  -1".tut.n[]     : run the Next example";
  -1".tut.p[]     : run the Previous example";
- -1".tut.r[]     : run the Current example";
+ -1".tut.c[]     : run the Current example";
  -1".tut.f[]     : go back to the First example";
  -1".tut.j[n]    : Jump to the specific example";
  -1".tut.db[]    : print out database statistics";
  -1".tut.res     : result of last run query";
  -1".tut.gcON[]  : turn garbage collection on after each query";
- -1".tut.gcOFF[] : turn garbage collection off after each query";}
+ -1".tut.gcOFF[] : turn garbage collection off after each query";
+ -1".tut.help[]  : display help information";
+ -1"\\\\           : quit"}
 
 info:{
  -1"";
@@ -65,18 +67,19 @@ info:{
  -1"These examples allows you to see some examples of q code and the corresponding";
  -1"performance on your system. Please note that the performance is dependent on";
  -1"your hardware.  Depending on the query, big performance gains can be seen";
- -1"when using multiple disks and when running the database process with slaves";
+ -1"when using multiple disks and when running the database process with slave processes";
  -1"on multicore systems e.g. -s 4";
  -1"You may want to experiment with slaves, and running each example several";
  -1"times. The performance may improve as the database and file system warm up.";
- -1"At any point you can inspect the database tables, or run different versions";
- -1"of supplied functions (i.e. different parameters).\n";
- -1"Turning garbage collection on will after each query will lower the total usage";
- -1"but degrade the query performance.";
+ -1"At any point you can inspect the database tables by running select statements on them.";
+ -1"You can re-run the functions with different parameters.  You can create your own";
+ -1"functions.  Please experiment!\n";
+ -1"Turning garbage collection on after each query will lower the total memory usage";
+ -1"but may degrade the query performance.";
  -1"Garbage collection is currently ",(("OFF";"ON").tut.gc),"\n";
  -1"See http://code.kx.com for reference on the q language.\n";
  -1"Run .tut.help[] to redisplay the below instructions";
- -1"Start by running .tut.n[]. Exit the process with \\\\\n";
+ -1"Start by running .tut.n[].\n";
  help[];
  -1"";}
 
@@ -88,6 +91,7 @@ db:{
  -1"It is using ",(string system"s")," slaves.";
  -1"There are ",(string count @[value;`.Q.pv;0])," ",(string @[value;`.Q.pf;`])," partitions.\n";
  show `rowcount xdesc ([]table:tables[`.];rowcount:count each value each tables[`.]);
- -1"\nThe schema of each table is:\n";
+ -1"\nThe schema of each table is:";
+ -1"(c = column; t = type; f = foreign key field; a = attribute)\n";
  {-1(string x),":"; show meta x;-1""} each tables[`.];
  -1"";};

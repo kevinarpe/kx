@@ -1,5 +1,5 @@
 /- the historic database directory to save to
-hdb:`$":./hdb"
+hdb:`$":./smartmeterDB"
 
 /- the date range to save
 startdate:2013.08.01
@@ -124,15 +124,22 @@ savestatic:{[hdb]
 -1"This will generate ",.Q.f[2;.000001*daycount]," million rows per day and ",.Q.f[2;.000001*totalcount:count[datelist]*daycount:sum[counts]*`int$1D%sampleperiod]," million rows in total";
 -1"Uncompressed disk usage will be approximately ",string[daymb]," MB per day and ",string[count[datelist]*daymb:`int$((40*sum counts)+daycount*24)%2 xexp 20]," MB in total"; 
 -1"Compression is switched ",@[{value x;"ON"};`.z.zd;"OFF"];
+-1"Data will be written to ",string hdb;
 -1"";
--1"To modify the volume of data, change the number of customers, the number of days, or the sample period of the data.  Minimum sample period is 1 minute";
+-1"To modify the volume of data change either the number of customers, the number of days, or the sample period of the data.  Minimum sample period is 1 minute";
+-1"These values, along with compression settings and output directory, can be modified at the top of this file (",(string .z.f),")";
 -1"";
 -1"To proceed, type go[]";
 
 /- do the save
 go:{
+ start:.z.p; 
  savestatic[hdb]; 
  save1day[hdb] each datelist;
  -1"\n";
+ end:.z.p;
  logout["HDB successfully built in directory ",string hdb];
+ logout["Time taken to generate and store ",.Q.f[2;.000001*totalcount]," million rows was ",string timetaken:`second$end-start];
+ logout["or ",.Q.f[2;.000001*totalcount%`int$timetaken]," million rows per second"];
+ 
  exit 0}
