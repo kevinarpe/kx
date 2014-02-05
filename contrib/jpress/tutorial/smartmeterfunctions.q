@@ -28,18 +28,42 @@ monthlyusage:{[month]
   select month:month,meterid,usage 
   from meterusage[`date$month; -1+`date$month+1]}
 
+/- calculate the difference in usage between two months for each meter
+/- order by absolute difference
+/- e.g. monthlychange[2013.08m; 2013.09m]
+monthlychange:{[month1;month2]
+ 
+ /- work out how many days are in each month
+ month1days:(`date$month1 + 1) - `date$month1;
+ month2days:(`date$month2 + 1) - `date$month2;
+ 
+ /- join the two monthly usage stats together
+ t:(select meterid,month1dailyusage:usage%month1days from monthlyusage[month1]) 
+    lj 
+    `meterid xkey select meterid,month2dailyusage:usage%month2days from monthlyusage[month2];
+  
+ /- add in the monthly change
+ t:update change:month2dailyusage - month1dailyusage from t;
+ 
+ /- add in a temporary absolute change column, 
+ /- sort on it, then delete it
+ delete abschange 
+  from `abschange xdesc 
+   update abschange:abs change from t}
+
 /- total monthly usage by customer type
 /- operate over a list of months
 /- e.g. monthlyusagebycusttype[2013.08 2013.09m]
 monthlyusagebycusttype:{[months] 
  select sum usage by month,custtype 
  from 
-  (raze monthlyusage each months,:()) 
+  (raze monthlyusage peach months,:()) 
   lj 
   `meterid xkey select meterid,custtype from static}
 
 /- Generate a pivot table with the % usage of each customer type in each region
 /- http://code.kx.com/wiki/Pivot
+/- e.g. meterusagepivot[2013.08.01;2013.08.31;1b]
 meterusagepivot:{[startdate;enddate;aspercent]
  t:meterusage[startdate;enddate];
  
@@ -59,6 +83,27 @@ meterusagepivot:{[startdate;enddate;aspercent]
  
  /- fill the pivot table with 0s
  0^t1}
+
+/- For every customer on every day within the date range, 
+/- calculate the n (daycount) day moving average of usage.
+/- Compare each days usage to the moving average, and flag it if it is
+/- > rangecheck away from the moving average
+/- e.g. meterusagejump[2013.08.01;2013.08.31;20;100]
+meterusagejump:{[startdate;enddate;daycount;rangecheck]
+ /- pull out the daily starting values
+ t:select first usage by date,meterid from meter where date within (startdate;enddate);
+
+ /- calculate the daily usage
+ t:update usage:next deltas usage by meterid from t;
+
+ /- add the moving average
+ t:update mavgusage:daycount mavg usage by meterid from t;
+
+ /- pull out the rows which are outside the range check
+ select from t where rangecheck < abs 100*1 - usage % mavgusage}
+
+
+
 /--------------------------
 /- TIME PROFILING analytics
 /--------------------------
@@ -77,10 +122,10 @@ groupusage:{[startdate; enddate; meterids; timebucket]
  t:$[meterids~`;
 	select first usage 
 	by date,(timebucket*0D00:01) xbar time
- 	from meter where date within (startdate;enddate);
-  	select sum usage 
-   	by date,(timebucket*0D00:01) xbar time 
-   	from meter where date within (startdate;enddate),meterid in meterids]; 
+	from meter where date within (startdate;enddate);
+	select sum usage 
+	by date,(timebucket*0D00:01) xbar time 
+	from meter where date within (startdate;enddate),meterid in meterids]; 
 
  /- The usage within each bucket is then the difference between the current
  /- bucket and the next bucket
@@ -162,9 +207,48 @@ dailystatsoptimized:{[startdate;enddate]
 /- BILLING
 /---------
 
+/- define a pricing table
+/- different customer types have different pricing schedules
+pricing:([custtype:`res`com`ind] time:(00:00 08:00 11:15 12:00 17:00 18:00 22:15;
+ 			               00:00 09:00 17:00 20:00;
+  			               00:00 08:00 17:00);
+		                 price:(0.6 1.2 1.1 1.0 1.1 1.4  0.6;
+			                0.6 0.9 0.8 0.6;
+			                0.4 0.6 0.4));
 
+/- Calculate the usage for every customer in every pricing period
+/- e.g. usageperperiod[2013.08.01;2013.08.10]
+usageperperiod:{[startdate;enddate]
+  
+ /- build a table containing the meter ids and the bill sample times
+ /- need to sample the data 1 minute after the billing time
+ samples:ungroup(select meterid,custtype from static)
+ 	         lj 
+                 update time+1 from pricing; 
 
+ /- get the list of dates between the start date and end date
+ datelist:startdate + til 1+enddate - startdate;
+ 
+ /- use aj (asof join) to build up a table of usage info at each price point 
+ t:raze {[samples;d] 
+  aj[`meterid`time;
+     update time:time+d from samples;
+     select time,meterid,usage from meter where date=d]}[samples] peach datelist;
 
+ /- calculate the usage in each period
+ update usage:next deltas usage by meterid from t}
+
+/- Calculate the bill for every meter
+/- e.g. bill[2013.08.01;2013.08.10]
+bill:{[startdate;enddate]
+ select cost:sum price*usage by meterid from usageperperiod[startdate;enddate]}
+ 
+/- Calculate the usage and cost for each different priced unit for every meter
+/- e.g. usageperprice[2013.08.01;2013.08.10] 
+usageperprice:{[startdate;enddate]
+ select sum usage,cost:sum price*usage 
+ by meterid,price 
+ from usageperperiod[startdate;enddate]}
 
 /-----------
 /- Utilities
