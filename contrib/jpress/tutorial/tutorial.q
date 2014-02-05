@@ -10,6 +10,7 @@ gc:0b
 runfunc:{[execstring;descrip]
  -1"";
  -1 header:(10#"*"),"  Example ",(string current),"  ",10#"*"; 
+ -1"";
  -1 descrip;
  -1"";
  func:first "[" vs execstring;
@@ -24,7 +25,7 @@ runfunc:{[execstring;descrip]
  out"Function executed in ",(string first ts),"ms using ",.Q.f[1;last[ts]%2 xexp 20]," MB of memory\n";
  
  -1"Result set contains ",(string count .tut.res)," rows.";
- -1"First ",(string disp:displayrows&count .tut.res)," element(s) of result set:";
+ -1"First ",(string disp:displayrows&count .tut.res)," element(s) of result set:\n";
   
  show disp sublist .tut.res;
  if[gc;-1"\nGarbage collecting...\n"; .Q.gc[]];
@@ -71,12 +72,17 @@ info:{
  -1"on multicore systems e.g. -s 4";
  -1"You may want to experiment with slaves, and running each example several";
  -1"times. The performance may improve as the database and file system warm up.";
+ -1"Note though that using slaves increases memory usage, and if you are using the trial";
+ -1"version of kdb+ you are limited to 32bit physical memory (approx 4GB).";
+ -1"The function definitions displayed here will be displayed without comments.  Please see";
+ -1"the function source file for comments and more description of how it works.";
  -1"At any point you can inspect the database tables by running select statements on them.";
  -1"You can re-run the functions with different parameters.  You can create your own";
  -1"functions.  Please experiment!\n";
  -1"Turning garbage collection on after each query will lower the total memory usage";
  -1"but may degrade the query performance.";
- -1"Garbage collection is currently ",(("OFF";"ON").tut.gc),"\n";
+ -1"Garbage collection is currently ",(("OFF";"ON").tut.gc);
+ -1"You are currently using the ",(1 _ string .z.o),"bit version of kdb+\n";
  -1"See http://code.kx.com for reference on the q language.\n";
  -1"Run .tut.help[] to redisplay the below instructions";
  -1"Start by running .tut.n[].\n";

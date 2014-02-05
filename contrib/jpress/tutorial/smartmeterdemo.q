@@ -2,7 +2,7 @@
 @[system;"l tutorial.q";{-1"Failed to load tutorial.q : ",x;exit 1}]
 
 /- load the smart meter functions
-@[system;"l smartmeterfunctions.q";{-1"Failed to load tutorial.q : ",x;exit 1}]
+@[system;"l smartmeterfunctions.q";{-1"Failed to load smartmeterfunctions.q : ",x;exit 1}]
 
 /- Load the HDB
 hdbdir:$[0=count .z.x;"./smartmeterdb";.z.x 0]
@@ -14,15 +14,19 @@ hdbdir:$[0=count .z.x;"./smartmeterdb";.z.x 0]
 /- Add in the smart meter details
 .tut.add["meterusage[2013.08.01;2013.08.10]";"Total meter usage for every customer over a 10 day period"];
 .tut.add["monthlyusage[2013.08m]";"Total meter usage for every customer for a given month"];
+.tut.add["monthlychange[2013.08m;2013.09m]";"Change in average daily meter usage between two months for every customer, ranked by absolute size of change.\nAverage daily figures are used as months have different numbers of days"]
 .tut.add["monthlyusagebycusttype[2013.08 2013.09m]";"Total monthly usage by customer type for a given set of months"];
 .tut.add["meterusagepivot[2013.08.01;2013.08.31;0b]";"Total meter usage pivotted by customer type and region"];
 .tut.add["meterusagepivot[2013.08.01;2013.08.31;1b]";"Total meter usage pivotted by customer type and region as a %"];
-.tut.add["dailystats[2013.08.01;2013.08.12]";"Daily statistics for each meter including flow rates to the customer"];
-/ .tut.add["dailystatsoptimized[2013.08.01;2013.08.12]";"Daily statistics for each meter including flow rates to the customer, with optimized implementation for slaves"];
-.tut.add["groupusage[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15]";"Time bucketed usage stats for a set of meterids aggregated together"];
-.tut.add["dailyaverageprofile[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15]";"Time bucketed usage, averaged over a date range, for a set of meter ids"];
-.tut.add["comparetoprofile[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15;2013.08.01;2013.08.31;exec meterid from static where custtype=`ind]";"Compare average daily volume profiles e.g. for different time periods, different customer types etc."]
-
+.tut.add["meterusagejump[2013.08.01;2013.08.31;20;100]";"For every meter over the given date range, calculate the (daycount) day moving average of total usage,\nand return those days where the usage is outside of the rangecheck percentage value"];
+/ .tut.add["dailystats[2013.08.01;2013.08.07]";"Daily statistics for each meter including flow rates to the customer"];
+.tut.add["dailystatsoptimized[2013.08.01;2013.08.12]";"Daily statistics for each meter including flow rates to the customer, with optimized implementation for slaves\nand to minimize memory usage"];
+.tut.add["groupusage[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15]";"Time bucketed usage stats for a set of meterids aggregated together.\nThis example computes the usage stats for all the commercial customers combined."];
+.tut.add["dailyaverageprofile[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15]";"Time bucketed usage, averaged over a date range, for a set of meter ids.\nThis example computes the average profile for all the commercial customers combined."];
+.tut.add["comparetoprofile[2013.08.01;2013.08.31;exec meterid from static where custtype=`com;15;2013.08.01;2013.08.31;exec meterid from static where custtype=`ind]";"Compare average daily volume profiles e.g. for different time periods, different customer types etc.\nThis example compares the profiles for the commercial and industrial customer bases."]
+.tut.add["usageperperiod[2013.08.01;2013.08.10]";"Using the pricing table to define different periods of the day with different prices on a per-customertype basis,\nfor every day and every meter calculate how much was used in each pricing period."]
+.tut.add["bill[2013.08.01;2013.08.10]";"Using usageperperiod, calculate the total bill for every meter"];
+.tut.add["usageperprice[2013.08.01;2013.08.10]";"Using usageperperiod, calculate the total usage at each price point"];
 
 /- Print out the tutorial info
 .tut.db[];
@@ -35,5 +39,7 @@ hdbdir:$[0=count .z.x;"./smartmeterdb";.z.x 0]
 show select number:count i by custtype from static;
 -1"\nThe region distribution is:";
 show select number:count i by region from static;
-
+-1"\nThe pricing table contains price-per-unit information for each customer type";
+-1"for different periods of the day";
+show pricing
 .tut.info["SMART METER DEMO"]
