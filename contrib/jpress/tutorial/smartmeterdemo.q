@@ -5,7 +5,7 @@
 @[system;"l smartmeterfunctions.q";{-1"Failed to load smartmeterfunctions.q : ",x;exit 1}]
 
 /- Load the HDB
-hdbdir:$[0=count .z.x;"./smartmeterdb";.z.x 0]
+hdbdir:$[0=count .z.x;"./smartmeterDB";.z.x 0]
 @[system;"l ",hdbdir;{-1"Failed to load specified hdb ",x,": ",y;exit 1}[hdbdir]]
 
 /- turn on garbage collection
