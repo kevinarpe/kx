@@ -1,6 +1,6 @@
 /--- CONFIG -------------
 
-/- database to write to 
+// database to write to 
 dbdir:`:hdb
 
 /- directory to read the files from
