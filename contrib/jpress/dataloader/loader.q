@@ -10,12 +10,12 @@ inputdir:`:examplecsv
 chunksize:`int$100*2 xexp 20;
 
 /- compression parameters
-/ .z.zd:15 2 6
+/ .z.zd:17 2 6
 
 /--- END OF CONFIG ------
 
-/- maintain a list of the db partitions which have been written to by the loader
-partitions:()
+/- maintain a dictionary of the db partitions which have been written to by the loader
+partitions:()!()
 
 /- maintain a list of files which have been read
 filesread:()
@@ -58,8 +58,8 @@ loaddata:{[filename;rawdata]
   /- splay the table - use an error trap
   .[upsert;(writepath;data);{out"ERROR - failed to save table: ",x}]; 
   
-  /- include the amended partitions in the list of those modified
-  partitions::distinct partitions,writepath;
+  /- make sure the written path is in the partition dictionary
+  partitions[writepath]:date;
  
   }[data] each exec distinct sourcetime.date from data;
  } 
@@ -90,8 +90,59 @@ sortandsetp:{[partition;sortcols]
  $[parted; out"`p# attribute set successfully"; out"ERROR - failed to set attribute"];
  }
 
+/- build a daily table
+dailystatsfromtrade:{[path;date]
+ 
+ out"Building dailystats for date ",(string date)," and path ",string path;
+ 
+ /- build the daily stats 
+ select high:max price,low:min price, open:first price, close:last price,volume:sum size by date:date,sym from  get path}
+
+builddailystats:{[removedups]
+ 
+ out"**** Building daily stats table ****";
+ 
+ /- make sure we have an up-to-date sym file
+ sym::get hsym `$(string dbdir),"/sym";
+ 
+ /- get the stats
+ stats:0!raze dailystatsfromtrade'[key partitions; value partitions];
+ 
+ out"Created ",(string count stats)," daily stat rows";
+ 
+ /- create the path to the daily table
+ dailypath:hsym`$(string dbdir),"/daily/";
+ 
+ /- enumerate it
+ out"Enumerating daily table";
+ .Q.en[dbdir; stats];
+ 
+ /- remove duplicates
+ if[removedups; 
+  dups:exec i from stats where ([]date;sym) in @[{select date,sym from get x};dailypath;([]date:();sym:())];
+  $[count dups;
+    [out"Removed ",(string count dups)," duplicates from stats table";
+     stats:select from stats where not i in dups];
+    out"No duplicates found"]];
+ 
+ /- save the data
+ if[count stats;
+  out"Saving to daily table";
+  if[.[{x upsert y;1b};(dailypath;stats);{out"ERROR - failed to save daily table: ",x;0b}];
+   /- make sure the table is sorted by date with an attribute on it
+   sortandsetp[dailypath;`date]]];
+ }
+
+finish:{[builddaily]
+ /- re-sort and set attributes on each partition
+ sortandsetp[;`sym`sourcetime] each key partitions;
+
+ /- build daily stats, removing duplicates
+ if[builddaily; builddailystats[1b]]; 
+ }
+
 /- load all the files from a specified directory
-loadallfiles:{[dir]
+loadallfiles:{[dir;builddaily]
   
  /- get the contents of the directory
  filelist:key dir:hsym dir;
@@ -103,6 +154,8 @@ loadallfiles:{[dir]
  {out"**** LOADING ",(string x)," ****";
   .Q.fsn[loaddata[x];x;chunksize]} each filelist;
  
- sortandsetp[;`sym`sourcetime] each partitions;}
+ /- finish the load
+ finish[builddaily];
+ }
 
-loadallfiles[inputdir]
+loadallfiles[inputdir;1b]
