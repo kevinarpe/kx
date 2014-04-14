@@ -80,6 +80,9 @@ envvars:distinct `KDBCODE`KDBCONFIG`KDBLOG,envvars
 req:@[value;`req;`symbol$()]
 req:distinct `proctype`procname,req
 
+version:"1.0"
+getversion:{version^@[{first read0 x};hsym`$getenv[`KDBCONFIG],"/version.txt";version]}
+
 \d .lg
 
 // Set the logging table at the top level
@@ -137,7 +140,7 @@ banner:{
  // print the banner
  -1 full;
  -1 blank; 
- -1 format"TorQ";
+ -1 format"TorQ v",.proc.getversion[];
  -1 format"AquaQ Analytics";
  -1 format"kdb+ consultancy, training and support";
  -1 blank;
