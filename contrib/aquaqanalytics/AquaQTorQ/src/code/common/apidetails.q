@@ -76,3 +76,9 @@ add[`.hb.errorperiod;1b;"Return the error period for a particular process type. 
 // async messaging
 add[`.async.deferred;1b;"Use async messaging to simulate sync communication";"[int(list): handles to query; query]";"(boolean list:success status; result list)"]
 add[`.async.postback;1b;"Send an async message to a process and the results will be posted back within the postback function call";"[int(list): handles to query; query; postback function]";"boolean list: successful send status"]
+
+// compression
+add[`.cmp.showcomp;1b;"Show which files will be compressed and how; driven from csv file";"[`:/path/to/database; `:/path/to/configcsv; maxagefilestocompress]";"table of files to be compressed"]
+add[`.cmp.compressmaxage;1b;"Run compression on files using parameters specified in configuration csv file, and specifying the maximum age of files to compress";"[`:/path/to/database; `:/path/to/configcsv; maxagefilestocompress]";""]
+add[`.cmp.docompression;1b;"Run compression on files using parameters specified in configuration csv file";"[`:/path/to/database; `:/path/to/configcsv]";""]
+

@@ -9,3 +9,4 @@ localhost,5020,gateway,gateway1
 localhost,20000,kill,killtick
 localhost,20001,monitor,monitor1
 localhost,20002,tickerlogreplay,tpreplay1
+localhost,20003,housekeeping,housekeeping1
