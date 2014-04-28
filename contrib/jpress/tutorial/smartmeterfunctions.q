@@ -203,18 +203,53 @@ dailystatsoptimized:{[startdate;enddate]
   from meter
   where date within (startdate;enddate)}
 
+/- export the dailystats to csv
+/- e.g. exportdailystats[startdate;enddate;`:../dailystats.csv]
+exportdailystats:{[startdate;enddate;file]
+ -1"\nGenerating daily stats";
+ stats:dailystats[startdate;enddate];
+  
+ -1"Writing ",(string count stats)," rows to csv";
+ start:.z.T;
+ file 0: .h.cd stats;
+ end:.z.T;
+ -1"Write time was ",(string end-start),"\n";}
+
+/- read in a daily stats csv
+/- e.g. importdailystats[`:../dailystats.csv]
+importdailystats:{[statsfile] 
+ ("DJFFFF";enlist",")0:statsfile
+ }
 /---------
 /- BILLING
 /---------
 
-/- define a pricing table
-/- different customer types have different pricing schedules
-pricing:([custtype:`res`com`ind] time:(00:00 08:00 11:15 12:00 17:00 18:00 22:15;
- 			               00:00 09:00 17:00 20:00;
-  			               00:00 08:00 17:00);
-		                 price:(0.6 1.2 1.1 1.0 1.1 1.4  0.6;
-			                0.6 0.9 0.8 0.6;
-			                0.4 0.6 0.4));
+/- Billing based on the basic pricing
+/- e.g. basicbill[2013.08.01;2013.09.31]
+basicmonthlybill:{[startmonth;endmonth]
+ 	
+ usage:raze monthlyusage each startmonth + til 1 + endmonth-startmonth;
+ 
+ /- get each meter usage, join on the customer type, then join on the basic pricing info
+ tobill:(usage lj `meterid xkey select meterid,custtype from static) 
+	lj `custtype xkey select custtype,price from basicpricing;
+ 
+ /- calculate the total amount to bill
+ select month,meterid,cost:price*usage from tobill
+ }
+
+/- The monthly balance of each customer 
+monthlybalance:{[startmonth;endmonth]
+ 
+ /- get the monthly payments
+ bill:basicmonthlybill[startmonth;endmonth]; 
+ 
+ /- join on the payments
+ bill:bill lj `month`meterid xkey 
+      select month:`month$date,meterid,paid:amount from payment where date.month within (startmonth;endmonth);
+
+ /- add in the running balance for each meter
+ update balance:sums paid-cost by meterid from bill} 
 
 /- Calculate the usage for every customer in every pricing period
 /- e.g. usageperperiod[2013.08.01;2013.08.10]
@@ -224,7 +259,7 @@ usageperperiod:{[startdate;enddate]
  /- need to sample the data 1 minute after the billing time
  samples:ungroup(select meterid,custtype from static)
  	         lj 
-                 update time+1 from pricing; 
+                 update time+1 from timepricing; 
 
  /- get the list of dates between the start date and end date
  datelist:startdate + til 1+enddate - startdate;
