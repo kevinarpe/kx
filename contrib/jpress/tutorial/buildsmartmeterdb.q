@@ -97,7 +97,7 @@ save1day:{[hdb;date]
  
  /- modify the time to include the date
  meter::update time:`timestamp$time+date from gen1day[];
-  
+ 
  /- garbage collect to minimise the memory before the save
  .Q.gc[];
  
@@ -118,7 +118,44 @@ savestatic:{[hdb]
  logout["Saving static data table to ",string stat:`$string[hdb],"/static"];
  /- create a static data table
  static:([meterid:key baseusage] custtype:`g#value baseusage[;1]; region:`g#raze {regionmap[x]y?1f}'[key counts;value counts]);
- .[set;(stat;static);{'"failed to save static table: ",x}]}
+ .[set;(stat;static);{'"failed to save static table: ",x}];
+ }
+
+savepricing:{[hdb]
+ logout["Saving pricing tables to ",(string basicp:`$string[hdb],"/basicpricing")," and ",string timep:`$string[hdb],"/timepricing"];
+ /- define a pricing table
+ /- different customer types have different pricing schedules
+ basicpricing:([custtype:`res`com`ind] price:1.0 0.8 0.5);
+ timepricing:([custtype:`res`com`ind] time:(00:00 08:00 11:15 12:00 17:00 18:00 22:15;
+                                       00:00 09:00 17:00 20:00;
+                                       00:00 08:00 17:00);
+                                 price:(0.6 1.2 1.1 1.0 1.1 1.4  0.6;
+                                        0.6 0.9 0.8 0.6;
+                                        0.4 0.6 0.4));
+ .[set;(basicp;basicpricing);{'"failed to save basicpricing table: ",x}];
+ .[set;(timep;timepricing);{'"failed to save timepricing table: ",x}];
+ }
+
+/- generate some payment information
+/- assume that each "customer type" pays a fixed amount per month based on their type, and that they pay on the last day of each month
+/- just give each customer type the same payment
+/- res pays 11500
+/- com pays 25000
+/- ind pays 80000
+savepayment:{[hdb;datelist;nonpay]
+ /- work out the list of months to save
+ /- should be a payment for each month, on the last day
+ mthlist:-1 _ months:distinct `month$datelist:asc datelist,:();
+ if[not (last months)=`month$1+last datelist; mthlist,:last months];
+ /- create a payment table
+ payments:([]date:-1+`date$1+mthlist) cross ([]meterid:key baseusage; custtype:value baseusage[;1]);
+ /- join on the payment value
+ payments:payments lj ([custtype:`res`com`ind] amount:11500 25000 80000f);
+ /- randomly remove some payments (for non-paying customers)
+ payments:delete from payments where i in (neg`long$nonpay*count payments)?count payments;
+ logout["Saving payment table to ",string pay:`$string[hdb],"/payment/"];
+ .[set;(pay;.Q.en[hdb;delete custtype from payments]);{'"failed to save payment table: ",x}];
+ }
 
 -1"This process is set up to save a daily profile across ",string[count datelist]," days for ",string[sum counts]," random customers with a sample every ",string[`int$sampleperiod%0D00:01]," minute(s).";
 -1"This will generate ",.Q.f[2;.000001*daycount]," million rows per day and ",.Q.f[2;.000001*totalcount:count[datelist]*daycount:sum[counts]*`int$1D%sampleperiod]," million rows in total";
@@ -131,11 +168,14 @@ savestatic:{[hdb]
 -1"";
 -1"To proceed, type go[]";
 
+
 /- do the save
 go:{
  start:.z.p; 
- savestatic[hdb]; 
+ savestatic[hdb];
+ savepricing[hdb]; 
  save1day[hdb] each datelist;
+ savepayment[hdb;datelist;0.05];
  -1"\n";
  end:.z.p;
  logout["HDB successfully built in directory ",string hdb];
