@@ -1,10 +1,10 @@
 REM see README.txt
 REM SET UP ENVIRONMENT VARIABLES 
 
-setx KDBCODE "C:/q/code"
-setx KDBCONFIG "C:/q/config"
-setx KDBLOG "C:/q/log"
-setx KDBHTML "C:/q/html"
+set KDBCODE=C:/q/code
+set KDBCONFIG=C:/q/config
+set KDBLOG=C:/q/log
+set KDBHTML=C:/q/html
 
 REM launch the tickerplant, rdb, hdb
 start "tickerplant" q tickerplant.q exampleschema hdb -p 5010
