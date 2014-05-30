@@ -31,10 +31,10 @@ sh launchtick.sh
 
 On windows,
 Edit the bat file to provide full paths to the environment variables, eg:
-setx KDBCODE "C:/path/to/code"
+set KDBCODE=C:/path/to/code
 else C:/q/ is used as the directory holding code, config, html and log folders.
 
-setx may not come as a default command in older windows versions. If setx fails, remove these commands from the .bat and manually add the environment variables:
+You can set the environment variables permanently by using setx (requires console restart) or by:
 Right click my computer -> properties
 Click advanced system settings
 click environment variables -> add
