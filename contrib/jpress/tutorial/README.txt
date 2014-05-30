@@ -41,7 +41,7 @@ The process will exit when complete.
 
 To run the demo script, use
 
-q smartmeterdemo.q
+q smartmeterdemo.q -p 5600
 
 If you modified the database directory from the default specified in buildsmartmeter.q, then you will need
 to launch the script specifying the new path e.g.
@@ -53,4 +53,16 @@ You should experiment with running the functions with different parameters (be c
 and running the database with and without slaves.  Using slaves will increase the memory usage.  To start with
 slaves use:
 
-q smartmeterdemo.q -s [number of slaves]
+q smartmeterdemo.q -s [number of slaves] -p 5600
+
+3. Look at the UI
+-----------------
+
+The Smart Meter Usage UI is intended as a simple example of an html5 front end talking directly to the q database.  It is not intended as a demonstration of capability in building advanced BI tools or complex GUIs.  It is to show the performance of kdb+ slicing and dicing the data in different ways directly from the raw dataset, and the q language - the whole report is done in one function, usagereport.  There is no caching of data.
+
+The report allows for 3 things:
+- filtering of the data by date, customer type and region
+- grouping (aggregating) by different combinations of dimensions.  The aggregated stats are max/min/avg/total/count.  If no grouping is selected, the raw usage for every meter is displayed
+- pivoting of the data by a chosen field.  If the data is pivoted then the totalusage value is displayed.
+
+To access the UI, point your browser (Chrome or Firefox only please!) at http://localhost:5600/smartmeter.html.  If the date range becomes large, the query will take more time and memory.  Similarly, grouping by hour can increase the time taken.  It will be possible to exceed the 32bit memory limits of the free version of kdb+ when working on large datasets.

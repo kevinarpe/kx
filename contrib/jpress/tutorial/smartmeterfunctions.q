@@ -285,6 +285,83 @@ usageperprice:{[startdate;enddate]
  by meterid,price 
  from usageperperiod[startdate;enddate]}
 
+/--------------------------------
+/ used for interactive report GUI
+/--------------------------------
+
+usagereport:{[startdate;enddate;regionfilter;custfilter;groupings;pivot]
+ 
+ /- use the regionfilter and sectorfilter to get the list of meterids we want
+ /- we could simplify the code a bit and do the filtering later (after the initial select)
+ /- but it will be less efficient
+ /- need to use functional form to build the select. We want to build the equivalent of:
+ /- exec meterid from static where region in regionfilter, custfilter in sector
+ /- but it will depend on whether regionfilter and custfilter are populated
+ /- the ids will then be used as a filter into the meter table
+ ids:$[0=count[regionfilter]+count custfilter;
+   	();
+	[staticwc:$[count regionfilter;enlist(in;`region;enlist regionfilter);()],$[count custfilter;enlist(in;`custtype;enlist custfilter);()];
+  	 eval(?;`static;enlist staticwc;();enlist`meterid)]];
+
+ /- extract the usage for each meter - need to go one day further
+ /- group on hour if hour is specified in the groupings
+ /- use the where filter if supplied
+ /- again we have to use functional form.  The query is the equivalent of 
+ /- select first usage by date, meterid [,hour:0D01 xbar time] from meter where date within (startdate;enddate+1) [,meterids in ids]
+ /- i.e. the hour grouping and meter id filter are optional
+ 
+ /- build the byclause
+ bygrp:$[`hour in groupings:groupings,pivot;
+ 	  / `date`meterid`hour!(`date;`meterid;(.q.xbar;0D01;`time));
+	  `date`meterid`hour!(`date;`meterid;`time.hh);
+          `date`meterid!`date`meterid];
+ /- and the where clause 
+ meterwc:(enlist (within;`date;(enlist;startdate;enddate+1))) , $[count ids; enlist (in;`meterid;enlist ids);()];
+ 
+ /- run the query
+ use:eval(?;`meter;enlist meterwc;bygrp;(enlist `usage)!enlist(.q.first;`usage));
+ 
+ /- calculate the differences, and shift by one to get the actual change in value for that meter
+ use:update usage:next deltas[first usage;usage] by meterid from use;
+
+ /- drop out the last day
+ use:select from use where date<enddate+1;
+ 
+ /- build the grouping clause dynamically, depending on input
+ /- the pivot column should always be in the groupings 
+ /- have to check we can handle the input
+ /- use functional form
+ grps:groupings inter `date`region`custtype`hour;
+ byclause:$[0=count grps; 0b; grps!grps];
+
+ /- these are the aggregations we want to calculate (if we are aggregating)
+ aggs:`meterreadings`maxusage`minusage`avgusage`totalusage!((count;`usage);(max;`usage);(min;`usage);(avg;`usage);(sum;`usage));
+
+ /- if any of the static fields are in the groupings, join them on
+ if[any`custtype`region in grps; use:use lj static];
+ 
+ /- re-aggregate the data, if necessary
+ /- eval is equivalent to "select count usage, max usage, min usage, avg usage, sum usage, by grp1, grp2 ... from use"
+ if[0<count grps; use:`long$eval(?;use;();byclause;aggs)];
+
+ /- pivot the data, if necessary
+ /- example taken from code.kx.  Pivot field is the totalusage
+ if[count pivot:first pivot; 
+  /- if date is the pivot field, need to modify it to type symbol so it can be a column header
+  if[pivot~`date; use:update date:`$string date from use];
+  if[pivot~`hour; use:update hour:`$string hour from use];
+  P:asc distinct (0!use) pivot;
+  use:0^eval(?;use;();pivot _ grps!grps;enlist(#;enlist P;(!;pivot;`totalusage)))];
+
+ 0!use}
+
+timeit:{[func;vars;maxsize]
+ start:.z.p;
+ res:export::func . vars;
+ (`int$(.z.p - start)%1000000; count res; maxsize sublist res)}
+
+dbstats:{([]field:("Date Range";"Meter Table Count");val:(((string first date)," to ",string last date);{reverse "," sv 3 cut reverse string x}[count meter]))}
+
 /-----------
 /- Utilities
 /-----------
