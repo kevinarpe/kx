@@ -7,11 +7,12 @@ enddate:2013.09.30
 
 /- the number of customers of each type - residential, commercial, industrial
 /- if >10m customers of one type, modify idbase as well
-counts:`res`com`ind!80000 15000 5000
+custtypes:`residential`commercial`industrial
+counts:custtypes!8000 1500 500
 
 /- the gap between samples from each smartmeter
 /- should not be lower than 0D00:01 (1 minute)
-sampleperiod:0D00:15
+sampleperiod:0D00:01
 
 /- To compress the data when saving it, uncomment the line below
 /- various compression options are available
@@ -28,19 +29,19 @@ logout:{-1(string .z.Z)," ",x}
 datelist:startdate+til 1+enddate-startdate
 
 /- the base line start point for each customer type
-base:`res`com`ind!20 40 300
+base:custtypes!20 40 300
 
 /- a set of lookups to determine which "region" each customer is in 
 /- mapping of region!probabilty of that customer type being in that region
-regions:`mall`carn`glen`temp
-regionmap:`res`com`ind!(`s#0 .05 .45 .85!regions;`s#0 .1 .3 .8!regions;`s#0 .8 .8 .85!regions)
+regions:`mallusk`carnmoney`glengormley`templepatrick
+regionmap:custtypes!(`s#0 .05 .45 .85!regions;`s#0 .1 .3 .8!regions;`s#0 .8 .8 .85!regions)
 
 /- the base ID for each of the customer types
-idbase:`res`com`ind!10000000 20000000 30000000
+idbase:custtypes!10000000 20000000 30000000
 
 /- generate a random baseline daily usage for each of the customers
 /- dictionary is id!(baseusage;profiletype)
-baseusage:raze {(idbase[x]+til counts[x])!flip(`long$(0.5*base[x])+counts[x]?base[x];counts[x]#x)} each `res`com`ind
+baseusage:raze {(idbase[x]+til counts[x])!flip(`long$(0.5*base[x])+counts[x]?base[x];counts[x]#x)} each custtypes
 
 /- add a unique attribute to base usage for faster lookups
 baseusage:(`u#key baseusage)!value baseusage
@@ -59,7 +60,7 @@ comgrad:raze(300 60 60 60 60 30 150 30 60 30 180 60 240 60 60)#'.5 .55 .6 .7 .6 
 resgrad:raze(360 30 60 30 480 60 180 60 120 60)#'.5 .6 .5 .45 .5 .55 .5 .48 .43 .5
 indgrad:raze(300 120 900 120)#'.5 .75 .5 .25
 
-gradients:`res`com`ind!(resgrad;comgrad;indgrad)
+gradients:custtypes!(resgrad;comgrad;indgrad)
 
 /- the sample points - each smart meter produces a data point every X minutes
 /- generate the indices to sample at, and the corresponding sampletimes
@@ -125,8 +126,8 @@ savepricing:{[hdb]
  logout["Saving pricing tables to ",(string basicp:`$string[hdb],"/basicpricing")," and ",string timep:`$string[hdb],"/timepricing"];
  /- define a pricing table
  /- different customer types have different pricing schedules
- basicpricing:([custtype:`res`com`ind] price:1.0 0.8 0.5);
- timepricing:([custtype:`res`com`ind] time:(00:00 08:00 11:15 12:00 17:00 18:00 22:15;
+ basicpricing:([custtype:custtypes] price:1.0 0.8 0.5);
+ timepricing:([custtype:custtypes] time:(00:00 08:00 11:15 12:00 17:00 18:00 22:15;
                                        00:00 09:00 17:00 20:00;
                                        00:00 08:00 17:00);
                                  price:(0.6 1.2 1.1 1.0 1.1 1.4  0.6;
@@ -150,7 +151,7 @@ savepayment:{[hdb;datelist;nonpay]
  /- create a payment table
  payments:([]date:-1+`date$1+mthlist) cross ([]meterid:key baseusage; custtype:value baseusage[;1]);
  /- join on the payment value
- payments:payments lj ([custtype:`res`com`ind] amount:11500 25000 80000f);
+ payments:payments lj ([custtype:custtypes] amount:11500 25000 80000f);
  /- randomly remove some payments (for non-paying customers)
  payments:delete from payments where i in (neg`long$nonpay*count payments)?count payments;
  logout["Saving payment table to ",string pay:`$string[hdb],"/payment/"];
