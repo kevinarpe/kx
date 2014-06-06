@@ -15,7 +15,7 @@ subscribedhandles:0 0Ni
 // subscribe to heartbeats and log messages on a handle
 subscribe:{[handle]
  subscribedhandles,::handle;
- @[handle;(`.ps.subscribe;`heartbeat;`);{.lg.e[`monitor;"failed to subscribe to logmsg on handle ",(string x),": ",y]}[handle]];
+ @[handle;(`.ps.subscribe;`heartbeat;`);{.lg.e[`monitor;"failed to subscribe to heartbeat on handle ",(string x),": ",y]}[handle]];
  @[handle;(`.ps.subscribe;`logmsg;`);{.lg.e[`monitor;"failed to subscribe to logmsg on handle ",(string x),": ",y]}[handle]];
  }
  
