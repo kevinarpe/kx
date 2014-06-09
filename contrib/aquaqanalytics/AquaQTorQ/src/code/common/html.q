@@ -45,7 +45,7 @@ end:{(neg union/[w[;;0]])@\:(`.u.end;x)}
 // ISO 8601 date time format, used for JSON.
 jstsiso8601:{("-" sv "." vs string `date$x),"T",string[`second$x],"Z"}'
 // convert to javascript timestamp format
-jstsfromts:{"j"$946684800000+86400000*"z"$x}
+jstsfromts:{"j"$946684800000j+86400000*"z"$x}
 // times,seconds - all will end up as 1970 values
 jstsfromt:{"j"$"t"$x}
 
