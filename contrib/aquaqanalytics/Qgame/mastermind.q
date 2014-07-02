@@ -2,11 +2,11 @@
 // Developed by WooiKent Lee
 // AquaQ Analytics
 
-system"S ",8?string"j"$.z.p;					/ super random
+system"S ",8?string"j"$.z.p;							/ super random
 
 tab:([name:`$();id:`long$()]code:();tries:`long$();stime:`time$();etime:`time$();ans:();result:());
 
-tabpath:hsym`$-2_string .z.f;					/ path to stats
+tabpath:hsym`$-2_string .z.f;							/ path to stats
 
 if[count key tabpath;tab:tab upsert get tabpath];		/ combine historical stats
 
@@ -43,9 +43,9 @@ play:{
 	if[not count t;'"Please start the game before supplying answer!\n"];
 	if[4<>count x;'"It must be 4 digit answer!\n"];
 	update tries+1,ans:enlist[last[ans],enlist x] from `tab where name=.z.u,id in max id,result like "";
-	yes:count where x=t;					/ correct position and char
+	yes:count where x=t;								/ correct position and char
 	po:4-yes+count({x _ x?y}/).(x;t)@\:where x<>t;		/ correct chat but wrong position
-	$[yes=count t;win x;clue[yes;po]]			/ return clues
+	$[yes=count t;win x;clue[yes;po]]					/ return clues
 	};
 
 win:{
@@ -136,20 +136,20 @@ stats:{
 	};
 	
 check:{
-	x:-1_x;								/ take off line break char
-	if[x like "start";:-1@'start`];					/ check for start command
-	if[x like "giveup";:-1@'giveup`];             			/ check for giveup command
-	if[x like "ghelp";:-1@'ghelp`];					/ check for ghelp command
-	if[x like "stats";:-1@'stats`];					/ check for stats command
-	if[0<="I"$x;:-1@'@[play;x;{enlist"\nError: ",x}]];		/ check solution
-	if[(x like"*exit")|(x like "\\\\");shutdown`];			/ check exit
+	x:-1_x;														/ take off line break char
+	if[x like "start";:-1@'start`];								/ check for start command
+	if[x like "giveup";:-1@'giveup`];           	  			/ check for giveup command
+	if[x like "ghelp";:-1@'ghelp`];								/ check for ghelp command
+	if[x like "stats";:-1@'stats`];								/ check for stats command
+	if[0<="I"$x;:-1@'@[play;x;{enlist"\nError: ",x}]];			/ check solution
+	if[(x like"*exit")|(x like "\\\\");shutdown`];				/ check exit
 	:-1"\nPlease use 'ghelp' to see the available commands\n";	/ ban other activities
 	};
 
 shutdown:{
 	tabpath upsert tab;						/ save stats
-	-1 bye`;							/ goodbye message
-	exit 0;								/ exit clean
+	-1 bye`;								/ goodbye message
+	exit 0;									/ exit clean
 	};
 
 .z.pi:check;
