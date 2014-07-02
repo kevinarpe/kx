@@ -1,6 +1,6 @@
 // Just for fun, a bit a mastermind game!
-// Developed by Kent Lee
-// AquaqQ Analytics
+// Developed by WooiKent Lee
+// AquaQ Analytics
 
 system"S ",8?string"j"$.z.p;					/ super random
 
