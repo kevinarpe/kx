@@ -14,11 +14,11 @@ welcome:{
 	("Hello and welcome to the MasterMind game!!                                                  ";
 	 "The game is simple, guess the correct 4 digit code and you win!                             ";
 	 "Each time you supply an answer, you will receive a clue whether your answer is close or not.";
-	 "For example, if the code is 1234 and you guess 1122, you will get the following clus:       ";
+	 "For example, if the code is 1234 and you guess 1122, you will get the following clues:      ";
 	 "1 correct character and correct position.                                                   ";
 	 "1 correct character but wrong possition.                                                    "; 
 	 "Hope you enjoy the game at your leisure. Use 'start' to start the game!                     ";
-	 "Also use 'ghelp' further details!\n							      ")
+	 "Also use 'ghelp' for further details!\n							     					  ")
 	};
 
 bye:{
