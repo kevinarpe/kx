@@ -109,7 +109,7 @@ ghelp:{
 	 "Use 'giveup to give up a game.";
 	 "Use 'stats' to check your progress.";
 	 "Supply answer by typing 4 digits on console.";
-	 "You can exit game by using 'exit' function or \\\\.\n")
+	 "You can exit game by using 'exit' or \\\\.\n")
 	};
 
 stats:{
