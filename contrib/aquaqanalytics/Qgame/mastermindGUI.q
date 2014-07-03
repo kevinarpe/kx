@@ -161,11 +161,11 @@ stats:{
 	
 check:{
 	x:-1_x;														/ take off line break char
-	if[x like "start";:-1@'start`];								/ check for start command
-	if[x like "giveup";:-1@'giveup`];           	  			/ check for giveup command
-	if[x like "ghelp";:-1@'ghelp`];								/ check for ghelp command
-	if[x like "stats";:-1@'stats`];								/ check for stats command
-	if[0<="I"$x;:-1@'@[play;x;{enlist"\nError: ",x}]];			/ check solution
+	if[x like "start";:-1 start`];								/ check for start command
+	if[x like "giveup";:-1 giveup`];           	  			/ check for giveup command
+	if[x like "ghelp";:-1 ghelp`];								/ check for ghelp command
+	if[x like "stats";:-1 stats`];								/ check for stats command
+	if[0<="I"$x;:-1 @[play;x;{enlist"\nError: ",x}]];			/ check solution
 	if[(x like"*exit")|(x like "\\\\");shutdown`];				/ check exit
 	:-1"\nPlease use 'ghelp' to see the available commands\n";	/ ban other activities
 	};
@@ -178,6 +178,6 @@ shutdown:{
 
 .z.pi:check;
 
--1@'welcome`;
+-1 welcome`;
 
 system"";
