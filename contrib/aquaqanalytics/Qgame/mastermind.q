@@ -31,7 +31,7 @@ start:{
 		  "You already started the game!";
 		  "Your guesses were ",(","sv exec ans 0 from tab where name in .z.u,id=max id),"\n")];
 	n:exec max id from tab where name in .z.u;
-	if[null n;n:0];
+	if[not count select from tab where name in .z.u;n:0];
 	`tab upsert `name`id`code`tries`stime`etime`ans`result!(.z.u;n+1;4?.Q.n;0;.z.t;0Nt;();"");
 	("";
 	 "Game started! Please supply answer. Example: Just type '1234' on the console.               ";
