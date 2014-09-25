@@ -53,6 +53,9 @@ tr.error-row:hover> td {
   display: none;
 }
 /* Logmsg tabs and contents */
+.tab-row{
+  margin-top:15px;
+}
 #myTab a {
 	cursor:pointer;
 }
@@ -64,13 +67,16 @@ tr.error-row:hover> td {
 /* 
 Responsive styling - Makes sure page looks suitable on phone, tablet and browser
 Used to style for iPhone and iPad - Resize your browser window to see it happen 
+Extra small devices (phones, less than 768px)
+No media query since this is the default in Bootstrap 
 */
+
 /* Small devices (tablets, up to 768px) */
 @media (min-width: 300px) { 
 	.table thead>tr>th, .table tbody>tr>th, .table tfoot>tr>th, .table thead>tr>td, .table tbody>tr>td, .table tfoot>tr>td {	padding:1px;	}
 	#heartbeat-table tr th:nth-child(1),#heartbeat-table tr td:nth-child(1),#heartbeat-table tr th:nth-child(4),#heartbeat-table tr td:nth-child(4) {  display:none; visibility:hidden; }
 }
-@media (min-width:480px) { 
+@media (min-width:768px) { 
 	#heartbeat-table tr th:nth-child(1),#heartbeat-table tr td:nth-child(1),#heartbeat-table tr th:nth-child(4),#heartbeat-table tr td:nth-child(4)	{  display:table-cell; visibility:visible; }
 }
 /* Medium devices (desktops, 768px and up) */
@@ -80,3 +86,12 @@ Used to style for iPhone and iPad - Resize your browser window to see it happen
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {  }
+
+/* DataTables - Fix for cell highlighting */
+table.dataTable tr.odd td.sorting_1,table.dataTable tr.odd td.sorting_2 {background-color:#f9f9f9;}
+table.dataTable tr.even td.sorting_1,table.dataTable tr.even td.sorting_2,table.dataTable tr.odd  {background-color:transparent;}
+table.dataTable tr.odd:hover td.sorting_1,table.dataTable tr.odd:hover td.sorting_2 {background-color:#F5F5F5;}
+table.dataTable tr:hover {background-color:#F5F5F5;}
+table.dataTable tr:first-child:hover {background-color:transparent;}
+table.dataTable thead th {border-bottom: inherit !important;}
+table{border-color:#FFF}

@@ -40,6 +40,58 @@ var MONITOR = (function(){
     return table;
   }
   /** 
+    Format and return a HTML rows when given an object
+    @method makeRows
+    @param data {Object} Parsed JSON Object containing column and row data 
+    @return {String} HTML Table data
+  */    
+  function makeRows(data){
+    var rows = "",
+        prop,
+        key,
+        row;
+
+    if(data.length === 0){ return false; }
+    for(key in data){ // Each row
+      if (data.hasOwnProperty(key)) {
+        rows+= '<tr>';
+        row = data[key];
+        for(prop in row){ 
+          if (row.hasOwnProperty(prop)) {
+            rows+= '<td>' + row[prop] + '</td>';
+          }
+        }
+        rows+= '</tr>';
+      }
+    }
+    return rows;
+  }  
+  /** 
+    Format and return a HTML row when given an object
+    @method makeRow
+    @param data {Object} Parsed JSON Object containing column and row data 
+    @return {String} HTML Table data
+  */    
+  function makeRow(data){
+    var rows = "",
+        prop,
+        key,
+        row;
+
+    if(data.length === 0){ return false; }
+    for(key in data){ // Each row
+      if (data.hasOwnProperty(key)) {
+        row = data[key];
+        for(prop in row){ 
+          if (row.hasOwnProperty(prop)) {
+            rows+= '<td>' + row[prop] + '</td>';
+          }
+        }
+      }
+    }
+    return rows;
+  }
+  /** 
     Draws a chart of bucketed time against errors using d3.js library
     @method barChart
     @requires d3
@@ -78,13 +130,13 @@ var MONITOR = (function(){
       margin = {top: 10, right: 10, bottom: 45, left: 30},
       width = svgWidth - margin.left - margin.right,
       height = svgHeight - margin.top - margin.bottom;
-        
+
     x = d3.scale.ordinal()
       .rangeRoundBands([0, width], 0.1, 1);
-  
+
     y = d3.scale.linear()
       .range([height, 0]);
-    
+
     timeformat = d3.time.format("%H:%M");
 
     xAxis = d3.svg.axis()
@@ -120,7 +172,7 @@ var MONITOR = (function(){
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("transform", function(d) {  // Rotates x axis values
-          return "rotate(-65)" 
+          return "rotate(-65)";
           });
     
     svg.append("g")
@@ -141,6 +193,7 @@ var MONITOR = (function(){
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.errcount); })
       .attr("height", function(d) { return height - y(d.errcount); });
+
   }
   /** 
     Attached keypress event handler to bucket chart input value. 
@@ -155,10 +208,10 @@ var MONITOR = (function(){
     // When Enter key is pressed on bucket time input
     $(id).keypress(function(e) {
       if(e.which === 13) {
-        KDBCONNECT.core.sendcmd(KDBCONNECT.core.websocket,{func: func,arg: parseInt($(this).val(),10)});
+        KDBCONNECT.send({func: func,arg: parseInt($(this).val(),10)});
       }
     });
-  };
+  }
   /** 
     Returns true if argument is an array
     @method isArray
@@ -204,17 +257,21 @@ var MONITOR = (function(){
     @method highlightRow
     @requires jQuery
     @param tableId {String} ID of table that you want to use
-    @param warningCol {Number} Column number of warning column, starts from 1
-    @param errorCol {Number} Column number of error column
+    @param colNumber {Number} Column number of warning column, starts from 1
+    @param conditionArray {Array} Array of conditions e.g. ["=";"true"]
   */      
   function highlightRow(tableId,colNumber,conditionArray,cssClass){
-    colNumber-=1;
     $(tableId).bind('DOMNodeInserted', function () {  
-      $('tbody tr').each(function(a,b) {
-        if( conditions(conditionArray,$(b).children().eq(colNumber).text()) )  { $(this).removeClass().addClass(cssClass); }
+      $(this).find('tbody tr').each(function(a,b) {
+        if( conditions(conditionArray,$(b).children().eq(colNumber).text()) )  { 
+          $(this).removeClass().addClass(cssClass); 
+        }else{
+          $(this).removeClass(cssClass);
+          //$(this).removeClass();
+        }
       });
     });
-  }  
+  }
   /** 
     Adds CSS styles to cells that have certain values
     @method highlightColCell
@@ -224,13 +281,14 @@ var MONITOR = (function(){
     @param nthCol {Number} Column number 
   */        
   function highlightColCell(tableId,hlClass,nthCol){
-    nthCol-=1; // So user doesn't have to count from zero
     $(tableId).bind('DOMNodeInserted', function () {  // Whenever a new element is inserted _FIND MORE ELEGANT SOLUTION
       $(tableId + ' tr').find('td:eq(' + nthCol + ')').addClass(hlClass);
     }); 
   }
   return {
     jsonTable: jsonTable,
+    makeRows: makeRows,
+    makeRow: makeRow,
     bucketChart: bucketChart,    
     barChart: barChart,
     highlightRow: highlightRow,
