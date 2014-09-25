@@ -3,7 +3,7 @@ REM SET UP ENVIRONMENT VARIABLES
 
 set KDBCODE=C:/q/code
 set KDBCONFIG=C:/q/config
-set KDBLOG=C:/q/log
+set KDBLOG=C:/q/logs
 set KDBHTML=C:/q/html
 
 REM launch the tickerplant, rdb, hdb

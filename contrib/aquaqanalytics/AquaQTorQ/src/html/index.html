@@ -13,6 +13,7 @@
 <title>Process Monitor</title>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="css/jquery.dataTables.css">
 <link rel="stylesheet" href="css/main.css">
 <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
@@ -35,7 +36,7 @@
     <h3>Heartbeat</h3>
     <div id="heartbeat-table"><h4 style="text-align:center">Empty</h4></div>
   </div>	
-  <div class="row">
+  <div class="row tab-row">
     <!-- Nav tabs for logmsgs chart and table -->
     <ul class="nav nav-tabs" id="myTab">
       <li class="active"><a href="#logmsgtable" data-toggle="tab">Table</a></li>
@@ -49,7 +50,7 @@
       </div>    
       <div class="tab-pane" id="logmsgchart">
         <h3>Log Error chart</h3>
-        <label for="bucket-time">Bucket in mins: </label><input type="text" name="bucket-mins" id="bucket-time" value="5" size="1">
+        <label for="bucket-time">Bucket in mins: </label><input type="text" name="bucket-mins" id="bucket-time" value="1" size="1">
         <div id="logmsg-chart"><h4 style="text-align:center">Empty</h4></div>
       </div>
     </div>			
@@ -61,15 +62,17 @@
   </footer>
 </div>
 <script type="text/javascript" src="js/vendor/jquery-1.11.0.min.js"></script>  <!-- jQuery library -->
+<script type="text/javascript" src="js/vendor/jquery-ui-1.10.4.custom.min.js"></script>  <!-- jQuery library -->
 <script type="text/javascript" src="js/vendor/bootstrap.min.js"></script>  <!-- bootstrap library -->
 <script type="text/javascript" src="js/vendor/d3.v3.min.js"></script>  <!-- d3.js library - a general purpose visualization library -->
+<script type="text/javascript" src="js/vendor/jquery.dataTables.min.js"></script>  <!-- bootstrap library -->
 <script type="text/javascript" src="js/vendor/c.js"></script>  <!-- KX's c.js library -->
 <script type="text/javascript" src="js/kdbconnect.js"></script>  <!-- KDB+ connect library -->
 <script type="text/javascript" src="js/monitor.js"></script>  <!-- Monitor library -->
 <script type="text/javascript" src="js/startmonitor.js"></script>  <!-- Start Monitor-->
 <script type="text/javascript">
 /* Start Monitor WebSocket connection */
-KDBCONNECT.core.init(MYKDBSERVER,MYKDBPORT);
+KDBCONNECT.init(MYKDBSERVER,MYKDBPORT);
 </script>
     </body>
 </html>
